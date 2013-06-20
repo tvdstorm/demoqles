@@ -31,6 +31,12 @@ void testIt() {
   
 }  
 
+Stylesheet normalize(Stylesheet s, Form f) = normalize(inlineQuestions(s, f));
+Stylesheet normalize(Stylesheet s) 
+  = (cleanupWidgetsAndDefaults
+     o applyDefaultStyles
+     o moveWidgetsToTop
+     o groupStylesAndRules)(s);
   
 Stylesheet inlineQuestions(Stylesheet s, Form f) {
   qs = ( q.var: q | /Question q <- f.questions, q has var );
@@ -66,8 +72,9 @@ Stylesheet cleanupWidgetsAndDefaults(Stylesheet s) {
   solve (s) {
    s = visit (s) {   //return innermost visit (s) {
     // assumes widget at the top. 
-    case (Style)`{widget <WidgetType wt1> <Style* s2> widget <WidgetType wt2> <Style* s3>}`
-       => (Style)`{widget <WidgetType wt1> <Style* s2> <Style* s3>}`
+    // BUG: there's something wrong with putting two *-things back in...
+    //case (Style)`{widget <WidgetType wt1> <Style* s2> widget <WidgetType wt2> <Style* s3>}`
+    //   => (Style)`{widget <WidgetType wt1> <Style* s2> <Style* s3>}`
     case (Rule)`{<Rule* rs1> default <Type t> <Style y> <Rule* rs2>}` 
        => (Rule)`{<Rule* rs1> <Rule* rs2>}`
    }

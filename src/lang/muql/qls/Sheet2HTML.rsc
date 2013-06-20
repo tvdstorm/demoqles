@@ -1,10 +1,9 @@
 module lang::muql::qls::Sheet2HTML
 
 import lang::muql::qls::Normalize;
-extend lang::muql::ql::Form2HTML;
-
-alias Result = tuple[rel[Var, Style], list[Widget]];
-
+import lang::muql::ql::Form2HTML;
+import IO;
+import ParseTree;
 
 /*
  Presupposes normalization which has the questions inlined into 
@@ -15,6 +14,14 @@ alias Result = tuple[rel[Var, Style], list[Widget]];
  - if there's widget it is the first style element.
  
 */     
+
+void testHTML() {
+  f = parse(#start[Form], |project://muql/input/tax.mql|);
+  s = parse(#start[Stylesheet], |project://muql/input/tax.mqls|);
+  ss = normalize(s.top, f.top);
+  println(sheet2html(ss)); 
+}
+
 
 str sheet2html(Stylesheet s) {
   int n = 0;
@@ -31,27 +38,27 @@ str page2html((Page)`page <Id n> <Rule r>`, int n)
     '\</div\>";
 
 str rule2html((Rule)`{<Rule* rs>}`, int level)
-  = ( "" | it + rule2html(r) + "\n" | r <- rs );
+  = ( "" | it + rule2html(r, level) + "\n" | r <- rs );
   
-list[Widget] rule2html((Rule)`section <String t> <Rule r>`)
+str rule2html((Rule)`section <String t> <Rule r>`, int level)
   = "\<h<level>\><t>\</h<level>\>
     '<rule2html(r, level + 1)>";
   
-str rule2html((Rule)`<Question q> {widget <WidgetType w> <Style* ys>}`)
-  = p(span((Style)`{<Style* ys>}`, widget2widget(w, q)));  
+str rule2html((Rule)`<Question q> {widget <WidgetType w> <Style* ys>}`, int level)
+  = condP(q, span((Style)`{<Style* ys>}`, widget2widget(w, q)));  
   
 default str rule2html((Rule)`<Question q> <Style y>`)
-  = p(span(y, question2html(q)));
+  = condP(q, span(y, question2html(q)));
 
-str widget2widget((WidgetType)`slider(<Integer a>, <Integer b>, <Integer c>)`, q)
+str widget2widget((WidgetType)`slider(<Integer a>, <Integer b>, <Integer c>)`, Question q)
   = "\<input type=\"range\" min=\"<a>\" max=\"<b>\" step=\"<c>\" 
-    '   name=\"<qname(q)>\" id=\"<qName(q)>\" /\>";
+    '   name=\"<qName(q)>\" id=\"<qName(q)>\" /\>";
   
-str widget2widget((WidgetType)`spinbox`, q)
+str widget2widget((WidgetType)`spinbox`, Question q)
   = "\<input type=\"number\" 
-    '   name=\"<qname(q)>\" id=\"<qName(q)>\" /\>";
+    '   name=\"<qName(q)>\" id=\"<qName(q)>\" /\>";
   
-str widget2widget((WidgetType)`radio(<String yes>, <String no>)`, q)
+str widget2widget((WidgetType)`radio(<String yes>, <String no>)`, Question q)
   = "\<div\>
     '  \<input type=\"radio\" name=\"<qName(q)>\" id=\"<qName(q)>\" 
     '     value=\"true\" data-bind=\"checked: <qName(q)>\"  /\>
@@ -63,11 +70,14 @@ str widget2widget((WidgetType)`radio(<String yes>, <String no>)`, q)
     '    <no>
     '\</div\>";
   
-str p(str x) = "\<p\><x>\</p\>"; 
+default str widget2widget(WidgetType _, Question q)
+  = question2html(q);  
+  
+str condP(Question q, str x) = 
+  "\<p data-bind=\"visible: <qName(q)>_visible\"\><x>\</p\>"; 
   
 str span(Style y, str s) = "\<span style=\"<style2css(y)>\"\><s>\</span\>";
 
-str style2css((Style)`{<Style* ys>}`) = ( "" | it + style2css(y) | y <- ys );
-str style2css((Style)`<Id n>: <Value v>`) = "<n>: <v>; ";
-// no widgets here.
+str style2css((Style)`{<Style* ys>}`) 
+  = ( "" | it + "<n>: <v>; " | (Style)`<Id n>: <Value v>` <- ys );
 
