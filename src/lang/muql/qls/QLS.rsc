@@ -3,11 +3,12 @@ module lang::muql::qls::QLS
 extend lang::muql::ql::Lexical;
 
 start syntax Stylesheet
-  = stylesheet: "stylesheet" Id name "{" Rule* rules "}";
+  = stylesheet: "stylesheet" Id name Page* pages;
+
+syntax Page = page: "page" Id name Rule rule;
 
 syntax Rule
-  = page: "page" String title Rule rule
-  | section: "section" String title Rule rule
+  = section: "section" String title Rule rule
   | question: "question" Var name
   | styledQuestion: "question" Var name Style style
   | defaultStyle: "default" Type type Style style
@@ -16,11 +17,11 @@ syntax Rule
 
 syntax Style
   = style: Id property ":" Value val
-  | widget: "widget" Widget widget
+  | widget: "widget" WidgetType widget
   | group: "{" Style* styles "}"
   ;
   
-syntax Widget
+syntax WidgetType
   = "checkbox"
   | "textbox"
   | "slider" "(" Integer "," Integer "," Integer ")"

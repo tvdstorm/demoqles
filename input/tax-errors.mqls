@@ -1,29 +1,32 @@
 
-stylesheet taxOfficeExample 
-  page Housing {
+stylesheet taxOfficeExample {
+  page "Housing" {
     section "Buying"
-      question hasBoughtHouse  
-        widget checkbox 
+      question haBoughtHouse  
+        widget: checkbox 
     section "Loaning"  
       question hasMaintLoan 
     section "Selling" {
       question hasSoldHouse
         widget radio("Yes", "No") 
       section "You sold a house" {
-        question sellingPrice
-          widget spinbox
+//        question sellingPrice
+//          widget spinbox
         question privateDebt
           widget slider(0, 10000000, 10000) 
         question valueResidue
+        question valueResidue
         default money {
+          widget spinbox
           width: 400
           font: "Arial" 
           fontsize: 14
           color: #999999
-          widget spinbox
+          widget textbox
         }        
       }
     }
     default boolean widget radio("Yes", "No")
   }  
+}
 

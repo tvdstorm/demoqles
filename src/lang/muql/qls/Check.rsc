@@ -12,6 +12,8 @@ import Map;
  - referenced questions exist in questionnaire
  - all questions are placed
  - no duplicate placement of questions
+ - compatibility of widgets to types.
+ - multiple defs of widgets
 */
 
 
@@ -26,7 +28,7 @@ set[Message] check(Stylesheet s, Form f) {
     else   
       placed += {v};
     if (v notin qt) 
-       msgs += {error("Undefined question", r@\loc)};
+      msgs += {error("Undefined question", r@\loc)};
     //else
     //   return r[@link=...];
   }
@@ -58,17 +60,18 @@ set[Message] check(Stylesheet s, Form f) {
   qs = domain(qt);
   if (placed & qs != qs) {
     missing = intercalate(", ", [ "<q>" | q <- qs - placed ]);
+    // should we link each error to the var in the questionnaire?
     msgs += {error("Missing placement for <missing>", s.name@\loc)}; 
   }
   
   return msgs;
 }
 
-bool compatible((Type)`boolean`, (Widget)`checkbox`) = true;
-bool compatible((Type)`boolean`, (Widget)`radio(<String _>, <String _>)`) = true;
-bool compatible((Type)`integer`, (Widget)`textbox`) = true;
-bool compatible((Type)`integer`, (Widget)`slider(<Integer _>, <Integer _>, <Integer _>)`) = true;
-bool compatible((Type)`integer`, (Widget)`spinbox`) = true;
-bool compatible((Type)`money`, (Widget)`textbox`) = true;
-bool compatible((Type)`money`, (Widget)`spinbox`) = true;
-default bool compatible(Type _, Widget _) = false;
+bool compatible((Type)`boolean`, (WidgetType)`checkbox`) = true;
+bool compatible((Type)`boolean`, (WidgetType)`radio(<String _>, <String _>)`) = true;
+bool compatible((Type)`integer`, (WidgetType)`textbox`) = true;
+bool compatible((Type)`integer`, (WidgetType)`slider(<Integer _>, <Integer _>, <Integer _>)`) = true;
+bool compatible((Type)`integer`, (WidgetType)`spinbox`) = true;
+bool compatible((Type)`money`, (WidgetType)`textbox`) = true;
+bool compatible((Type)`money`, (WidgetType)`spinbox`) = true;
+default bool compatible(Type _, WidgetType _) = false;
