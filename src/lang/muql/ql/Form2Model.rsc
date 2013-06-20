@@ -12,7 +12,7 @@ str qName(Question q) = "<q.var>_<q@\loc.offset>";
 // needs bindings on f
 str form2model(Form f, str name) {
    fields = form2fields(f);
-   return "function <name>Model() {
+   return "function <name>() {
           '  var self = this;
           '  <intercalate("\n", fields)>
           '}";

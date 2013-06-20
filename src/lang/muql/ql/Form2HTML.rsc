@@ -30,9 +30,11 @@ str form2html(Form f, str(Form) items, str(Form, str) model) {
   return top-down-break visit (t) {
     case /TITLE/ => name
     case /CONTENT/ => items(f)
-    case /INIT/ => "<model(f, name)>
+    // MAJOR BUG? if "<name>$model" is changed to name + "$model" the
+    // second occurrence of name is changed too!!!
+    case /INIT/ => "<model(f, "<name>$model")>
                    '$(document).ready(function() {
-                   '   ko.applyBindings(new <name>Model());
+                   '   ko.applyBindings(new <name>$model());
                    '});"
   }
 }

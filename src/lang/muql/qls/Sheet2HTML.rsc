@@ -30,7 +30,7 @@ str qls2html(Stylesheet s, Form f) {
   nPages = size([ p | p <- s.pages ]);
   str sheet2model(Form f, str name) {
     fields = form2fields(f);
-    return "function <name>Model() {
+    return "function <name>() {
            '  var self = this;
            '  <intercalate("\n", fields)>
            '  <if (nPages > 1) {>
