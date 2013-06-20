@@ -1,4 +1,5 @@
 
+
 stylesheet taxOfficeExample 
   page Housing {
     section "Buying"
@@ -13,7 +14,7 @@ stylesheet taxOfficeExample
         question sellingPrice
           widget spinbox
         question privateDebt
-          widget slider(0, 10000000, 10000) 
+          widget spinbox 
         question valueResidue
         default money {
           width: 400

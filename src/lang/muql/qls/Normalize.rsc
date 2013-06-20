@@ -39,14 +39,17 @@ Stylesheet normalize(Stylesheet s)
      o groupStylesAndRules)(s);
   
 Stylesheet inlineQuestions(Stylesheet s, Form f) {
-  qs = ( q.var: q | /Question q <- f.questions, q has var );
+  qs = { <q.var, q> | /Question q <- f.questions, q has var };
   return visit (s) {
-    case (Rule)`question <Var v>` => (Rule)`<Question q> { }`
-      when Question q := qs[v]
-    case (Rule)`question <Var v> <Style y>` => (Rule)`<Question q> <Style y>`
-      when Question q := qs[v]
+    case (Rule)`question <Var v>` => joinQuestions(qs[v], (Style)`{}`)
+    case (Rule)`question <Var v> <Style y>` => joinQuestions(qs[v], y)
   }
 }
+
+Rule joinQuestions({}, Style s) = (Rule)`{}`;
+Rule joinQuestions({q, *qs}, Style s) = (Rule)`{<Question q> <Style s>}`
+  when (Rule)`{<Rule* rs>}` := joinQuestions(qs, s);
+
 
 Stylesheet flattenNestedGroups(Stylesheet s) {
   return innermost visit (s) {

@@ -33,14 +33,14 @@ set[Message] check(Stylesheet s, Form f) {
     //   return r[@link=...];
   }
   
-  void checkType(Widget w, Type t) {
+  void checkType(WidgetType w, Type t) {
     if (!compatible(t, w)) 
       msgs += {error("Widget incompatible to type", w@\loc)};
   }
   
   void checkStyle(Style y, Type t) {
-    ws = [ w | /Widget w := y ];
-    if (Widget w <- ws) 
+    ws = [ w | /WidgetType w := y ];
+    if (WidgetType w <- ws) 
       checkType(w, t);
     if (size(ws) > 1) {
       msgs += { warning("Widget already defined", w@\loc) | w <- tail(ws) };  

@@ -83,11 +83,12 @@ default str rule2html((Rule)`<Question q> <Style y>`)
   = condP(q, span(y, question2html(q)));
 
 str widget2widget((WidgetType)`slider(<Integer a>, <Integer b>, <Integer c>)`, Question q)
-  = "\<input type=\"range\" min=\"<a>\" max=\"<b>\" step=\"<c>\" 
+  = "\<input type=\"range\" min=\"<a>\" max=\"<b>\" step=\"<c>\"
+    '   data-bind=\"value: <qName(q)>\" 
     '   name=\"<qName(q)>\" id=\"<qName(q)>\" /\>";
   
 str widget2widget((WidgetType)`spinbox`, Question q)
-  = "\<input type=\"number\" 
+  = "\<input type=\"number\" data-bind=\"value: <qName(q)>\"
     '   name=\"<qName(q)>\" id=\"<qName(q)>\" /\>";
   
 str widget2widget((WidgetType)`radio(<String yes>, <String no>)`, Question q)
@@ -98,7 +99,7 @@ str widget2widget((WidgetType)`radio(<String yes>, <String no>)`, Question q)
     '\</div\>
     '\<div\>
     '  \<input type=\"radio\" name=\"<qName(q)>\" id=\"<qName(q)>\" 
-    '     value=\"false\" data-bind=\"checked: <qName(q)>\" /\>
+    '     value=\"\" data-bind=\"checked: <qName(q)>\" /\>
     '    <no>
     '\</div\>";
   
@@ -106,7 +107,7 @@ default str widget2widget(WidgetType _, Question q)
   = question2html(q);  
   
 str condP(Question q, str x) = 
-  "\<p data-bind=\"visible: <qName(q)>_visible\"\><x>\</p\>"; 
+  "\<p data-bind=\"visible: <qName(q)>_visible\"\><q.label>&nbsp;<x>\</p\>"; 
   
 str span(Style y, str s) = "\<span style=\"<style2css(y)>\"\><s>\</span\>";
 
