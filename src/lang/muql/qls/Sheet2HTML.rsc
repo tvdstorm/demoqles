@@ -3,8 +3,6 @@ module lang::muql::qls::Sheet2HTML
 import lang::muql::qls::Normalize;
 import lang::muql::ql::Form2HTML;
 import lang::muql::ql::Form2Model;
-import lang::muql::ql::Bind;
-import IO;
 import List;
 import ParseTree;
 
@@ -18,13 +16,13 @@ import ParseTree;
  
 */     
 
-void testHTML() {
-  pt = parse(#start[Form], |project://muql/input/tax.mql|);
-  s = parse(#start[Stylesheet], |project://muql/input/tax.mqls|);
-  <f, defs> = definitions(pt.top);
-  f = bind(f, defs);
-  println(qls2html(s.top, f)); 
-}
+//void testHTML() {
+//  pt = parse(#start[Form], |project://muql/input/tax.mql|);
+//  s = parse(#start[Stylesheet], |project://muql/input/tax.mqls|);
+//  <f, defs> = definitions(pt.top);
+//  f = bind(f, defs);
+//  println(qls2html(s.top, f)); 
+//}
 
 // required bindings on f.
 str qls2html(Stylesheet s, Form f) {

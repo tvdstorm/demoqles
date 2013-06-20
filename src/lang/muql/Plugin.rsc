@@ -105,13 +105,9 @@ set[Message] doWithSheetAndForm(Tree pt, set[Message](Stylesheet, Form) doit) {
         if (msgs == {}) {
           return doit(s, f);
         }
-        else {
-          return {error("QL file has errors", s.name@\loc)};
-        }
+        return {error("QL file has errors", s.name@\loc)};
       }
-      else {
-        return {error("BUG: QL file is not valid", s.name@\loc)};
-      }
+      return {error("BUG: QL file is not valid", s.name@\loc)};
     }
     catch _: 
       return {error("Can\'t parse QL file", s.name@\loc)};

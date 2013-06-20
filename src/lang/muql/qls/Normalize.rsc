@@ -2,34 +2,31 @@ module lang::muql::qls::Normalize
 
 extend lang::muql::ql::QL;
 extend lang::muql::qls::QLS;
-import IO;
 import Relation;
 import ParseTree;
 
-syntax Rule
-  = styledQuestion: Question Style style
-  ;
+syntax Rule = styledQuestion: Question Style style;
   
-void testIt() {
-  f = parse(#start[Form], |project://muql/input/tax.mql|);
-  s = parse(#start[Stylesheet], |project://muql/input/tax.mqls|);
-  s2 = inlineQuestions(s.top, f.top);
-  println("INLINED:");
-  println(s2);  
-  s3 = groupStylesAndRules(s2);
-  println("GROUPED STYLES:");
-  println(s3);  
-  s4 = moveWidgetsToTop(s3);
-  println("WIDGETS AT TOP:");
-  println(s4);  
-  s5 = applyDefaultStyles(s4);
-  println("DEFAULTS APPLIED:");
-  println(s5);
-  s6 = cleanupWidgetsAndDefaults(s5);
-  println("CLEANUP:");
-  println(s6);
-  
-}  
+//void testIt() {
+//  f = parse(#start[Form], |project://muql/input/tax.mql|);
+//  s = parse(#start[Stylesheet], |project://muql/input/tax.mqls|);
+//  s2 = inlineQuestions(s.top, f.top);
+//  println("INLINED:");
+//  println(s2);  
+//  s3 = groupStylesAndRules(s2);
+//  println("GROUPED STYLES:");
+//  println(s3);  
+//  s4 = moveWidgetsToTop(s3);
+//  println("WIDGETS AT TOP:");
+//  println(s4);  
+//  s5 = applyDefaultStyles(s4);
+//  println("DEFAULTS APPLIED:");
+//  println(s5);
+//  s6 = cleanupWidgetsAndDefaults(s5);
+//  println("CLEANUP:");
+//  println(s6);
+//  
+//}  
 
 Stylesheet normalize(Stylesheet s, Form f) = normalize(inlineQuestions(s, f));
 Stylesheet normalize(Stylesheet s) 
@@ -67,7 +64,7 @@ Stylesheet groupStylesAndRules(Stylesheet s) {
     case (Rule)`<Question q> <Style y>` => (Rule)`<Question q> {<Style y>}`
       when !(y is group) 
     case (Rule)`section <String t> <Rule r>` => (Rule)`section <String t> {<Rule r>}`
-      when bprintln("r = <r>"), bprintln("r is group? <r is group>"), !(r is group) 
+      when !(r is group) 
   }
 }
 
