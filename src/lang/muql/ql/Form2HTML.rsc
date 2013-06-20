@@ -21,13 +21,16 @@ loc TEMPLATE = |project://muql/src/lang/muql/template.html|;
 str qName(Question q) = "<q.var>_<q@\loc.offset>";
 str qLabel(Question q) = "<q.label>";
 
-str form2html(Form f) {
+str ql2html(Form f) = form2html(f, form2items, form2model);
+
+// requires bindings on f.
+str form2html(Form f, str(Form) items, str(Form, str) model) {
   name = "<f.name>";
   t = readFile(TEMPLATE);
   return top-down-break visit (t) {
     case /TITLE/ => name
-    case /CONTENT/ => form2items(f)
-    case /INIT/ => "<form2model(f, name)>
+    case /CONTENT/ => items(f)
+    case /INIT/ => "<model(f, name)>
                    '$(document).ready(function() {
                    '   ko.applyBindings(new <name>Model());
                    '});"
@@ -36,11 +39,12 @@ str form2html(Form f) {
 
 str form2items(Form f) = 
   "\<ul\>
-  '  <( "\n" | it + question2item(q) + "\n" | /Question q := f, q has var)>
+  '  <( "" | it + question2item(q) + "\n" | /Question q := f, q has var)>
   '\</ul\>"; 
 
 str expr2js(Expr e) = expr2js(e, str(str x) { return x; });
 
+// TODO: let this be reused in sheet2html
 str question2item(Question q) 
   = "\<li data-bind=\"visible: <qName(q)>_visible\"\>
     '  <question2html(q)>

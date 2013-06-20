@@ -2,7 +2,10 @@ module lang::muql::qls::Sheet2HTML
 
 import lang::muql::qls::Normalize;
 import lang::muql::ql::Form2HTML;
+import lang::muql::ql::Form2Model;
+import lang::muql::ql::Bind;
 import IO;
+import List;
 import ParseTree;
 
 /*
@@ -16,14 +19,43 @@ import ParseTree;
 */     
 
 void testHTML() {
-  f = parse(#start[Form], |project://muql/input/tax.mql|);
+  pt = parse(#start[Form], |project://muql/input/tax.mql|);
   s = parse(#start[Stylesheet], |project://muql/input/tax.mqls|);
-  ss = normalize(s.top, f.top);
-  println(sheet2html(ss)); 
+  <f, defs> = definitions(pt.top);
+  f = bind(f, defs);
+  println(qls2html(s.top, f)); 
 }
 
+// required bindings on f.
+str qls2html(Stylesheet s, Form f) {
+  str sheet2items(Form f) = sheet2html(normalize(s, f));
+  nPages = size([ p | p <- s.pages ]);
+  str sheet2model(Form f, str name) {
+    fields = form2fields(f);
+    return "function <name>Model() {
+           '  var self = this;
+           '  <intercalate("\n", fields)>
+           '  <if (nPages > 1) {>
+           '  self.$page = ko.observable(0);
+           '  self.$prevPage = function () {
+           '    if (self.$page \> 0)  
+           '     self.$page(self.$page() - 1);
+           '  };
+           '  self.$nextPage = function () {
+           '    if (self.$page \< <nPages>)  
+           '     self.$page(self.$page() + 1);
+           '  };
+           '  <}>
+           '}";
+  }
+  
+  return form2html(f, sheet2items, sheet2model);
+}
 
-str sheet2html(Stylesheet s) {
+str sheet2html((Stylesheet)`stylesheet <Id n> <Page p>`) 
+  = rule2html(p.rule, 1); 
+
+default str sheet2html(Stylesheet s) {
   int n = 0;
   return "<for (p <- s.pages) {>
          ' <page2html(p, n)>

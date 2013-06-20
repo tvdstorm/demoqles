@@ -9,7 +9,7 @@ import List;
 // todo: separate qName in utils or something
 str qName(Question q) = "<q.var>_<q@\loc.offset>";
 
-// needs bind
+// needs bindings on f
 str form2model(Form f, str name) {
    fields = form2fields(f);
    return "function <name>Model() {
