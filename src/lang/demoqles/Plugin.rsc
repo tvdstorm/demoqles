@@ -40,7 +40,7 @@ public void setupQL() {
         pt.args[1] = f;
         return pt[@messages=msgs];
       }
-      throw "Error: not a form";
+      return pt[@messages={error("BUG: not a form", pt@\loc)}];
     }),
     
     builder(set[Message] (Tree pt) {
@@ -55,7 +55,7 @@ public void setupQL() {
         }
         return msgs;
       }
-      throw {error("Not a form")};
+      return pt[@message={error("BUG: Not a form", pt@\loc)}];
     })
   };
   

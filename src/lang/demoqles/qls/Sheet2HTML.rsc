@@ -102,7 +102,7 @@ str widget2widget((WidgetType)`radio(<String yes>, <String no>)`, Question q)
     '\</div\>";
   
 default str widget2widget(WidgetType _, Question q)
-  = question2html(q);  
+  = question2html(q);  // FIXME: label is output twice...
   
 str condP(Question q, str x) = 
   "\<p data-bind=\"visible: <qName(q)>_visible\"\><q.label>&nbsp;<x>\</p\>"; 
