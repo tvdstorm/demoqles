@@ -1,6 +1,6 @@
-module lang::muql::ql::Expr2JS
+module lang::demoqles::ql::Expr2JS
 
-import lang::muql::ql::QL;
+import lang::demoqles::ql::QL;
 
 alias WrapVar = str(Expr var);
 

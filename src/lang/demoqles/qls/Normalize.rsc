@@ -1,7 +1,7 @@
-module lang::muql::qls::Normalize
+module lang::demoqles::qls::Normalize
 
-extend lang::muql::ql::QL;
-extend lang::muql::qls::QLS;
+extend lang::demoqles::ql::QL;
+extend lang::demoqles::qls::QLS;
 import Relation;
 import ParseTree;
 

@@ -1,6 +1,6 @@
-module lang::muql::ql::Normalize
+module lang::demoqles::ql::Normalize
 
-import lang::muql::ql::QL;
+import lang::demoqles::ql::QL;
 import ParseTree; // apparently needed
 import IO;
 

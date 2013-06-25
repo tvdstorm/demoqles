@@ -1,6 +1,6 @@
-module lang::muql::ql::Types
+module lang::demoqles::ql::Types
 
-import lang::muql::ql::QL;
+import lang::demoqles::ql::QL;
 import Node;
 
 data QLType

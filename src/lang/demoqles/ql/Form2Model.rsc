@@ -1,8 +1,8 @@
-module lang::muql::ql::Form2Model
+module lang::demoqles::ql::Form2Model
 
-import lang::muql::ql::QL;
-import lang::muql::ql::Expr2JS;
-import lang::muql::ql::Types;
+import lang::demoqles::ql::QL;
+import lang::demoqles::ql::Expr2JS;
+import lang::demoqles::ql::Types;
 import ParseTree;
 import List;
 

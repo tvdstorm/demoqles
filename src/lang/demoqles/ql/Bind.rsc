@@ -1,7 +1,7 @@
-module lang::muql::ql::Bind
+module lang::demoqles::ql::Bind
 
-import lang::muql::ql::QL;
-import lang::muql::ql::Types;
+import lang::demoqles::ql::QL;
+import lang::demoqles::ql::Types;
 import Message;
 import IO;
 import ParseTree;

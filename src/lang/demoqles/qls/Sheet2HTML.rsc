@@ -1,8 +1,8 @@
-module lang::muql::qls::Sheet2HTML
+module lang::demoqles::qls::Sheet2HTML
 
-import lang::muql::qls::Normalize;
-import lang::muql::ql::Form2HTML;
-import lang::muql::ql::Form2Model;
+import lang::demoqles::qls::Normalize;
+import lang::demoqles::ql::Form2HTML;
+import lang::demoqles::ql::Form2Model;
 import List;
 import ParseTree;
 
@@ -36,11 +36,11 @@ str qls2html(Stylesheet s, Form f) {
            '  <if (nPages > 1) {>
            '  self.$page = ko.observable(0);
            '  self.$prevPage = function () {
-           '    if (self.$page \> 0)  
+           '    if (self.$page() \> 0)  
            '     self.$page(self.$page() - 1);
            '  };
            '  self.$nextPage = function () {
-           '    if (self.$page \< <nPages>)  
+           '    if (self.$page() \< <nPages - 1>)  
            '     self.$page(self.$page() + 1);
            '  };
            '  <}>
@@ -61,7 +61,7 @@ default str sheet2html(Stylesheet s) {
 }
 
 str page2html((Page)`page <Id n> <Rule r>`, int n) 
-  = "\<div id=\"<n>:page\" data-bind=\"visible: ($page === <n>)\"\>
+  = "\<div id=\"<n>:page\" data-bind=\"visible: ($page() === <n>)\"\>
     '  <rule2html(r, 1)>
     '  \<button data-bind=\"click: $prevPage\"\>Previous\</button\>
     '  \<button data-bind=\"click: $nextPage\"\>Next\</button\>
@@ -77,7 +77,7 @@ str rule2html((Rule)`section <String t> <Rule r>`, int level)
 str rule2html((Rule)`<Question q> {widget <WidgetType w> <Style* ys>}`, int level)
   = condP(q, span((Style)`{<Style* ys>}`, widget2widget(w, q)));  
   
-default str rule2html((Rule)`<Question q> <Style y>`)
+default str rule2html((Rule)`<Question q> <Style y>`, int _)
   = condP(q, span(y, question2html(q)));
 
 str widget2widget((WidgetType)`slider(<Integer a>, <Integer b>, <Integer c>)`, Question q)

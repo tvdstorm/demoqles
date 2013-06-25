@@ -1,6 +1,6 @@
-module lang::muql::ql::QL
+module lang::demoqles::ql::QL
 
-extend lang::muql::ql::Lexical;
+extend lang::demoqles::ql::Lexical;
 
 start syntax Form
   = form: "form" Id name "{" Question* questions "}"

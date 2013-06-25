@@ -1,9 +1,9 @@
-module lang::muql::ql::Check
+module lang::demoqles::ql::Check
 
 
-import lang::muql::ql::Types;
-import lang::muql::ql::QL;
-import lang::muql::ql::Bind;
+import lang::demoqles::ql::Types;
+import lang::demoqles::ql::QL;
+import lang::demoqles::ql::Bind;
 import Message;
 import ParseTree;
 import IO;

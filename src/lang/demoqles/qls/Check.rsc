@@ -1,7 +1,7 @@
-module lang::muql::qls::Check
+module lang::demoqles::qls::Check
 
-import lang::muql::ql::QL;
-import lang::muql::qls::QLS;
+import lang::demoqles::ql::QL;
+import lang::demoqles::qls::QLS;
 import Message;
 import ParseTree;
 import List;

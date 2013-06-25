@@ -1,6 +1,6 @@
-module lang::muql::qls::QLS
+module lang::demoqles::qls::QLS
 
-extend lang::muql::ql::Lexical;
+extend lang::demoqles::ql::Lexical;
 
 start syntax Stylesheet
   = stylesheet: "stylesheet" Id name Page* pages;

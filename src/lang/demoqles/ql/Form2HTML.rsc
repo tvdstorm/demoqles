@@ -1,22 +1,22 @@
-module lang::muql::ql::Form2HTML
+module lang::demoqles::ql::Form2HTML
 
-import lang::muql::ql::Types;
-import lang::muql::ql::QL;
-import lang::muql::ql::Expr2JS;
-import lang::muql::ql::Form2Model;
-import lang::muql::ql::Bind;
+import lang::demoqles::ql::Types;
+import lang::demoqles::ql::QL;
+import lang::demoqles::ql::Expr2JS;
+import lang::demoqles::ql::Form2Model;
+import lang::demoqles::ql::Bind;
 import IO;
 import ParseTree;
 
 void testGen() {
-  pt = parse(#start[Form], |project://muql/input/tax.mql|);
+  pt = parse(#start[Form], |project://demoqles/input/tax.mql|);
   <f, defs> = definitions(pt.top);
   f = bind(f, defs);
   g = form2html(f);
   println(g);
 }  
 
-loc TEMPLATE = |project://muql/src/lang/muql/template.html|;
+loc TEMPLATE = |project://demoqles/src/lang/demoqles/template.html|;
 
 str qName(Question q) = "<q.var>_<q@\loc.offset>";
 str qLabel(Question q) = "<q.label>";
