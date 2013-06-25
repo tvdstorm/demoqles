@@ -7,6 +7,7 @@ import lang::demoqles::ql::Outline;
 import lang::demoqles::ql::Form2HTML;
 import lang::demoqles::qls::QLS;
 import lang::demoqles::qls::Check;
+import lang::demoqles::qls::Outline;
 import lang::demoqles::qls::Sheet2HTML;
 
 
@@ -74,6 +75,13 @@ public void setupQLS() {
     annotator(Tree(Tree pt) {
        msgs = doWithSheetAndForm(pt, check);
        return pt[@messages=msgs];
+    }),
+    
+    outliner(node(Tree pt) {
+      if (Stylesheet s := pt.args[1]) {
+        return outline(s);
+      }
+      throw "Error: not a form";
     }),
     
     builder(set[Message] (Tree pt) {
