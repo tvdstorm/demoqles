@@ -8,6 +8,7 @@ import lang::demoqles::ql::Flatten;
 import Message;
 import ParseTree;
 import IO;
+import Relation;
 
 // presupposes binding
 
