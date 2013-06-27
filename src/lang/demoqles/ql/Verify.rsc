@@ -2,17 +2,17 @@ module lang::demoqles::ql::Verify
 
 import lang::demoqles::ql::QL;
 import lang::demoqles::ql::Flatten;
+import lang::demoqles::ql::Bind;
+import lang::demoqles::ql::Check; // for use/def
 
 import Set;
 import IO;
 import ParseTree;
-import lang::demoqles::ql::Bind;
 import Relation;
 import List;
 import util::ShellExec;
 import String;
 import Message;
-
 /*
  To check
  
