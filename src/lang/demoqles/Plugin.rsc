@@ -3,6 +3,7 @@ module lang::demoqles::Plugin
 import lang::demoqles::ql::QL;
 import lang::demoqles::ql::Bind;
 import lang::demoqles::ql::Check;
+import lang::demoqles::ql::Verify;
 import lang::demoqles::ql::Outline;
 import lang::demoqles::ql::Form2HTML;
 import lang::demoqles::qls::QLS;
@@ -16,8 +17,8 @@ import util::IDE;
 import Message;
 import IO;
 
-private str DEMO_QL ="MuQL";
-private str DEMO_QLS ="MuQLS";
+private str DEMO_QL ="DemoQL";
+private str DEMO_QLS ="DemoQLS";
 
 public void setupQL() {
   registerLanguage(DEMO_QL, "dql", Tree(str src, loc l) {
@@ -37,7 +38,7 @@ public void setupQL() {
       if (Form f := pt.args[1]) {
         f_and_defs = definitions(f);
         f = bind(f_and_defs[0], f_and_defs[1]);
-        msgs = tc(f);
+        msgs = checkForm(f);
         pt.args[1] = f;
         return pt[@messages=msgs];
       }
@@ -48,15 +49,17 @@ public void setupQL() {
       if (Form f := pt.args[1]) {
         f_and_defs = definitions(f);
         f = bind(f_and_defs[0], f_and_defs[1]);
-        msgs = tc(f);
+        msgs = checkForm(f);
         if (msgs == {}) {
-          l = pt@\loc;
-          l.extension= "html";
-          writeFile(l, ql2html(f));
+          h = pt@\loc[extension="html"];
+          writeFile(h, ql2html(f));
+          temp = pt@\loc[extension="smt2"];
+          temp = |file:///tmp/<temp.file>|;
+          return verifyForm(f, temp);
         }
         return msgs;
       }
-      return pt[@message={error("BUG: Not a form", pt@\loc)}];
+      return {error("BUG: Not a form", pt@\loc)};
     })
   };
   

@@ -24,7 +24,7 @@ import ParseTree;
 //  println(qls2html(s.top, f)); 
 //}
 
-// required bindings on f.
+// requires bindings on f.
 str qls2html(Stylesheet s, Form f) {
   str sheet2items(Form f) = sheet2html(normalize(s, f));
   nPages = size([ p | p <- s.pages ]);

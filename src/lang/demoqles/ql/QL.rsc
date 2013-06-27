@@ -9,7 +9,7 @@ start syntax Form
 syntax Question
   = question: Label label Var var ":" Type type
   | computed: Label label Var var ":" Type type "=" Expr expr
-  | ifThen: "if" "(" Expr cond ")" Question !>> "else"
+  | ifThen: "if" "(" Expr cond ")" Question () !>> "else"
   | ifThenElse: "if" "(" Expr cond ")" Question question "else" Question elseQuestion
   | @Foldable group: "{" Question* questions "}"
   ;

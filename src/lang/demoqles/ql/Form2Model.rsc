@@ -5,6 +5,7 @@ import lang::demoqles::ql::Expr2JS;
 import lang::demoqles::ql::Types;
 import ParseTree;
 import List;
+import IO;
 
 // todo: separate qName in utils or something
 str qName(Question q) = "<q.var>_<q@\loc.offset>";
@@ -18,12 +19,13 @@ str form2model(Form f, str name) {
           '}";
 }
 
-list[str] form2fields(Form f) = ( [] | it + toFields(q, (Expr)`true`) | q <- f.questions );
+list[str] form2fields(Form f) 
+  = ( [] | it + toFields(q, (Expr)`true`) | q <- f.questions );
 
 list[str] toFields((Question)`if (<Expr c>) <Question q>`, Expr cond) = 
    toFields(q, (Expr)`<Expr cond> && <Expr c>`);
 
-list[str] toFields((Question)`if (<Expr c>) <Question q1> else <Question q2>`) 
+list[str] toFields((Question)`if (<Expr c>) <Question q1> else <Question q2>`, Expr cond) 
   = toFields(q1, (Expr)`<Expr cond> && <Expr c>`)
   + toFields(q2, (Expr)`<Expr cond> && !(<Expr c>)`);
 
