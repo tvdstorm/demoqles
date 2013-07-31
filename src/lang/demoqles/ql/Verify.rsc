@@ -37,9 +37,14 @@ import Message;
 //  }
 //}
 
+str SOLVER_PATH = "/usr/local/bin/z3";
+
 // requires bind
 // no cycles
 set[Message] verifyForm(Form f, loc tempfile) {
+  if (!exists(|file://<SOLVER_PATH>|)) {
+    return {warning("Solver does not exist at <SOLVER_PATH>", f.name@\loc)};
+  }
   qs = sort(flatten(f));
   smt = qs2smt(qs);
   ds = form2nonDetChecks(f);
@@ -71,7 +76,7 @@ set[Message] verifyForm(Form f, loc tempfile) {
 
 str runSMTsolver(loc tmpfile, str input) {
   writeFile(tmpfile, input);
-  pid = createProcess("/usr/local/bin/z3", ["-smt2", "-nw", tmpfile.path]);
+  pid = createProcess(SOLVER_PATH, ["-smt2", "-nw", tmpfile.path]);
   x = trim(readEntireStream(pid));
   killProcess(pid);
   return x;
