@@ -4,7 +4,7 @@ import lang::ql::QL;
 import lang::ql::Bind;
 import lang::ql::Check;
 import lang::ql::Outline;
-import lang::ql::Form2HTML;
+import lang::ql::Compile;
 
 
 import ParseTree;
@@ -46,8 +46,10 @@ public void setupQL() {
         f = bind(f_and_defs[0], f_and_defs[1]);
         msgs = checkForm(f);
         if (msgs == {}) {
-          h = pt@\loc[extension="html"];
-          writeFile(h, ql2html(f));
+          js = pt@\loc[extension="js"];
+          writeFile(js, form2js(f));
+          html = pt@\loc[extension="html"];
+          writeFile(html, form2html(f, js));
         }
         return msgs;
       }
