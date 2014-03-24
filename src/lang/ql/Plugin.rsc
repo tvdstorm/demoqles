@@ -20,6 +20,8 @@ public void setupQL() {
     return parse(#start[Form], src, l);
   });
   
+  lastMessages = {};
+  
   contribs = {
      outliner(node(Tree pt) {
       if (Form f := pt.args[1]) {
@@ -35,6 +37,7 @@ public void setupQL() {
         f = bind(f_and_defs[0], f_and_defs[1]);
         msgs = checkForm(f);
         pt.args[1] = f;
+        lastMessages = msgs;
         return pt[@messages=msgs];
       }
       return pt[@messages={error("BUG: not a form", pt@\loc)}];
@@ -42,10 +45,10 @@ public void setupQL() {
     
     builder(set[Message] (Tree pt) {
       if (Form f := pt.args[1]) {
-        f_and_defs = definitions(f);
-        f = bind(f_and_defs[0], f_and_defs[1]);
-        msgs = checkForm(f);
-        if (msgs == {}) {
+        //f_and_defs = definitions(f);
+        //f = bind(f_and_defs[0], f_and_defs[1]);
+        //msgs = checkForm(f);
+        if (lastMessages == {}) {
           js = pt@\loc[extension="js"];
           writeFile(js, form2js(f));
           html = pt@\loc[extension="html"];

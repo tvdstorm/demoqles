@@ -19,8 +19,8 @@ Form bind(Form f, map[str, rel[loc, QLType]] defs) {
   return visit (f) {
     case Expr e:(Expr)`<Id name>`: {
       x = "<e.name>";
-      locs = defs[x]<0>;
-      types = defs[x]<1>;
+      locs = (defs[x]?) ? defs[x]<0> : {};
+      types = (defs[x]?) ? defs[x]<1> : {};
       insert e[@links=locs][@types=types][@doc=types2str(types)];
     } 
   }

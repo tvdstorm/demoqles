@@ -62,9 +62,11 @@ str cond2group(Expr e, str parent)
     
 str exp2lazyValue(Expr e) 
   = "new QLrt.LazyValue(
-    '  function () { return [<expParams(e)>]; },
-    '  function (<expParams(e)>) { return <expr2js(e)>; }
-    ')";
+    '  function () { return [<ps>]; },
+    '  function (<ps>) { return <expr2js(e)>; }
+    ')"
+  when str ps := expParams(e);
+    
 
 str nameFor(Question q) = "q<q@\loc.offset>";
 
@@ -73,7 +75,7 @@ str type2widget((Type)`money`)   = "MoneyValueWidget";
 str type2widget((Type)`string`)  = "StringValueWidget";
 str type2widget((Type)`integer`) = "IntegerValueWidget";
 
-list[str] freeVars(Expr e) =  sort({ "<x>" | /Id x := e });
+list[str] freeVars(Expr e) =  [ "<x>" | /Id x := e ];
 
 str expParams(Expr e) = intercalate(", ", freeVars(e));
   
