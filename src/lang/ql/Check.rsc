@@ -1,10 +1,10 @@
-module lang::demoqles::ql::Check
+module lang::ql::Check
 
 
-import lang::demoqles::ql::Types;
-import lang::demoqles::ql::QL;
-import lang::demoqles::ql::Bind;
-import lang::demoqles::ql::Flatten;
+import lang::ql::Types;
+import lang::ql::QL;
+import lang::ql::Bind;
+import lang::ql::Flatten;
 import Message;
 import ParseTree;
 import IO;

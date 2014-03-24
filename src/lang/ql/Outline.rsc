@@ -1,6 +1,6 @@
-module lang::demoqles::ql::Outline
+module lang::ql::Outline
 
-import lang::demoqles::ql::QL;
+import lang::ql::QL;
 import util::IDE;
 import ParseTree;
 import Relation;

@@ -1,4 +1,4 @@
-module lang::demoqles::ql::Lexical
+module lang::ql::Lexical
 
 lexical Var = Id;
 

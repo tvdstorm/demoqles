@@ -1,6 +1,6 @@
-module lang::demoqles::ql::Flatten
+module lang::ql::Flatten
 
-import lang::demoqles::ql::QL;
+import lang::ql::QL;
 import ParseTree; // apparently needed
 import IO;
 

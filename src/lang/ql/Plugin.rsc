@@ -1,15 +1,11 @@
-module lang::demoqles::Plugin
+module lang::Plugin
 
-import lang::demoqles::ql::QL;
-import lang::demoqles::ql::Bind;
-import lang::demoqles::ql::Check;
-import lang::demoqles::ql::Verify;
-import lang::demoqles::ql::Outline;
-import lang::demoqles::ql::Form2HTML;
-import lang::demoqles::qls::QLS;
-import lang::demoqles::qls::Check;
-import lang::demoqles::qls::Outline;
-import lang::demoqles::qls::Sheet2HTML;
+import lang::ql::QL;
+import lang::ql::Bind;
+import lang::ql::Check;
+import lang::ql::Verify;
+import lang::ql::Outline;
+import lang::ql::Form2HTML;
 
 
 import ParseTree;

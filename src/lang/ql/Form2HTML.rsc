@@ -1,10 +1,10 @@
-module lang::demoqles::ql::Form2HTML
+module lang::ql::Form2HTML
 
-import lang::demoqles::ql::Types;
-import lang::demoqles::ql::QL;
-import lang::demoqles::ql::Expr2JS;
-import lang::demoqles::ql::Form2Model;
-import lang::demoqles::ql::Bind;
+import lang::ql::Types;
+import lang::ql::QL;
+import lang::ql::Expr2JS;
+import lang::ql::Form2Model;
+import lang::ql::Bind;
 import IO;
 import ParseTree;
 
