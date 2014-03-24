@@ -1,9 +1,8 @@
-module lang::Plugin
+module lang::ql::Plugin
 
 import lang::ql::QL;
 import lang::ql::Bind;
 import lang::ql::Check;
-import lang::ql::Verify;
 import lang::ql::Outline;
 import lang::ql::Form2HTML;
 
@@ -49,9 +48,6 @@ public void setupQL() {
         if (msgs == {}) {
           h = pt@\loc[extension="html"];
           writeFile(h, ql2html(f));
-          temp = pt@\loc[extension="smt2"];
-          temp = |file:///tmp/<temp.file>|;
-          return verifyForm(f, temp);
         }
         return msgs;
       }
@@ -62,61 +58,3 @@ public void setupQL() {
   registerContributions(DEMO_QL, contribs);
 }
 
-
-public void setupQLS() {
-  registerLanguage(DEMO_QLS, "dqls", Tree(str src, loc l) {
-    return parse(#start[Stylesheet], src, l);
-  });
-  
-  contribs = {
-    
-//    annotator(start[Form](start[Form] pt) {
-    annotator(Tree(Tree pt) {
-       msgs = doWithSheetAndForm(pt, check);
-       return pt[@messages=msgs];
-    }),
-    
-    outliner(node(Tree pt) {
-      if (Stylesheet s := pt.args[1]) {
-        return outline(s);
-      }
-      throw "Error: not a form";
-    }),
-    
-    builder(set[Message] (Tree pt) {
-      set[Message] doit(Stylesheet s, Form f) {
-        l = pt@\loc;
-        l.extension = "html";
-        writeFile(l, qls2html(s, f));
-        return {};
-      }
-      return doWithSheetAndForm(pt, doit);
-    })
-  };
-  
-  registerContributions(DEMO_QLS, contribs);
-}
-
-
-set[Message] doWithSheetAndForm(Tree pt, set[Message](Stylesheet, Form) doit) {
-  if (Stylesheet s := pt.args[1]) {
-    l = s@\loc;
-    l.extension = "dql";
-    try {
-      pt2 = parse(#start[Form], l);
-      if (Form f := pt2.args[1]) {
-        f_and_defs = definitions(f);
-        f = bind(f_and_defs[0], f_and_defs[1]);
-        msgs = tc(f);
-        if (msgs == {}) {
-          return doit(s, f);
-        }
-        return {error("QL file has errors", s.name@\loc)};
-      }
-      return {error("BUG: QL file is not valid", s.name@\loc)};
-    }
-    catch _: 
-      return {error("Can\'t parse QL file", s.name@\loc)};
-  }
-  return {error("BUG: Not a sheet", pt@\loc)};
-}
