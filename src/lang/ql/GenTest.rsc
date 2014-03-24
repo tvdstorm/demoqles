@@ -42,23 +42,14 @@ void benchmarkAll() {
       return parse(#start[Form], src);
     });
 
-  // Bind
-  benchmarkIt(|project://QL-LWC14/output/bind.csv|,
-    Form(str src) {
-      return parse(#start[Form], src).top;
-    },
-    Form(Form f) {
-      rel[str, loc, QLType] defs = {};
-      <f, defs> = definitions(f);
-      return bind(f, defs);
-    });
-
+  benchmarkBind();
+  
   // Typecheck
   benchmarkIt(|project://QL-LWC14/output/typecheck.csv|,
     Form(str src) {
       Tree pt = parse(#start[Form], src);
       Form f = pt.top;
-      rel[str, loc, QLType] defs = {};
+      map[str, rel[loc, QLType]] defs = ();
       <f, defs> = definitions(f);
       return bind(f, defs);
     }, checkForm);
@@ -66,6 +57,18 @@ void benchmarkAll() {
 
   benchmarkCompile();
 }
+
+map[int, num] benchmarkBind() = 
+  benchmarkIt(|project://QL-LWC14/output/bind.csv|,
+    Form(str src) {
+      return parse(#start[Form], src).top;
+    },
+    Form(Form f) {
+      map[str, rel[loc, QLType]] defs = ();
+      <f, defs> = definitions(f);
+      return bind(f, defs);
+    });
+
 
 map[int, num] benchmarkCompile() =
   benchmarkIt(|project://QL-LWC14/output/compile.csv|, 

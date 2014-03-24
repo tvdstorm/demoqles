@@ -14,28 +14,29 @@ anno bool Question@redecl;
 
 // Bug:
 //start[Form] bind(start[Form] f) {
-Form bind(Form f, rel[str,loc, QLType] defs) {
+Form bind(Form f, map[str, rel[loc, QLType]] defs) {
   str types2str(set[QLType] ts) = intercalate(", ", [ type2str(t) | t <- ts ]);
   return visit (f) {
     case Expr e:(Expr)`<Id name>`: {
       x = "<e.name>";
-      locs = defs<0,1>[x];
-      types = defs<0,2>[x];
+      locs = defs[x]<0>;
+      types = defs[x]<1>;
       insert e[@links=locs][@types=types][@doc=types2str(types)];
     } 
   }
 }
 
-tuple[Form, rel[str, loc, QLType]] definitions(Form f) {
-  defs = {};
+tuple[Form, map[str, rel[loc, QLType]]] definitions(Form f) {
+  defs = ();
   
   Question addDef(Question q, Var x, Type t) {
     s = "<x>";
     qt = qlType(t);
-    if (<s, _, qt2> <- defs, qt2 != qt) {
+    if (s in defs, <_, qt2> <- defs[s], qt2 != qt) {
       q@redecl = true;
     }
-    defs += {<s, q@\loc, qt>};
+    rel[loc, QLType] empty = {};
+    defs[s]?empty += {<q@\loc, qt>};
     return q;
   }
   
