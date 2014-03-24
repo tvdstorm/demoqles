@@ -12,15 +12,15 @@ import Relation;
 
 // presupposes binding
 
-set[Message] checkForm(Form f) = tc(f) + detectCycles(f);
+set[Message] checkForm(Form f) = tc(f); // + detectCycles(f);
 
 set[str] uses(Question q) = { "<x>" | /(Expr)`<Id x>` := q };
   
 set[str] defs(Question q) = { "<x>" | /Var x := q };
 
-set[Message] detectCycles(Form f) 
-  = { error("Cycle involving <x>", f.name@\loc) | x <- carrier(g), <x, x> in g }
-  when g := ( {} | it + defs(q) * uses(q) | q <- flatten(f) )+;
+//set[Message] detectCycles(Form f) 
+//  = { error("Cycle involving <x>", f.name@\loc) | x <- carrier(g), <x, x> in g }
+//  when g := ( {} | it + defs(q) * uses(q) | q <- flatten(f) )+;
 
 
 set[Message] tc(Form f) = ( {} | it + tc(q) | q <- f.questions );
