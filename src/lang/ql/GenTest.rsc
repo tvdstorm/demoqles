@@ -13,7 +13,26 @@ import Set;
 import List;
 import String;
 import lang::csv::IO;
+import util::Math;
 
+void mergeCSVs() {
+  parsing = readCSV(#lrel[int,num], |project://QL-LWC14/output/parse.csv|);
+  binding = readCSV(#lrel[int,num], |project://QL-LWC14/output/bind.csv|);
+  checking = readCSV(#lrel[int,num], |project://QL-LWC14/output/typecheck.csv|);
+  compiling = readCSV(#lrel[int,num], |project://QL-LWC14/output/compile.csv|);
+  csv = [];
+  
+  num toS(int ns) = toReal(ns) / 1000000000.0;
+  
+  for (i <- [0..size(parsing)]) {
+    csv += [<parsing[i][0], 
+             toS(parsing[i][1]), 
+             toS(binding[i][1]), 
+             toS(checking[i][1]), 
+             toS(compiling[i][1])>]; 
+  }
+  writeCSV(csv, |project://QL-LWC14/output/benchmarks.csv|); 
+}
 
 void benchmarkAll() {
   // Parse
@@ -45,12 +64,14 @@ void benchmarkAll() {
     }, checkForm);
      
 
- // Compile
+  benchmarkCompile();
+}
+
+map[int, num] benchmarkCompile() =
   benchmarkIt(|project://QL-LWC14/output/compile.csv|, 
     Form(str src) {
       return parse(#start[Form], src).top;
     }, form2js);
-}
 
 map[int, num] benchmarkIt(loc out, &T(str) pre, value(&T) doIt) {
   bm = ();  
