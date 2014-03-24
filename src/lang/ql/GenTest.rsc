@@ -6,6 +6,8 @@ import ParseTree;
 import util::Benchmark;
 import Set;
 import List;
+import String;
+import lang::csv::IO;
 
 map[str,num] benchmarkBinSearch() {
   cases = ();
@@ -15,15 +17,21 @@ map[str,num] benchmarkBinSearch() {
   
   void() make(str src) = () { parse(#start[Form], src); };
   
-  for (i <- [0,10..1000]) {
+  sizes = ();
+  
+  for (i <- [0,10..1001]) {
     src = binForm(1, i);
+    sizes["<i>"] = size(src);
     cases["<i>"] = make(src);
   }
 
   b = benchmark(cases, cpuTime);
+  csv = [];
   for (k <- sort(toList(b<0>))) {
     println("<k>: <b[k]>");
+    csv += [<sizes[k], b[k]>];
   } 
+  writeCSV(csv, |project://QL-LWC14/output/parsing.csv|);
   return b;
 }
 
