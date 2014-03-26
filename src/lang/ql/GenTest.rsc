@@ -22,7 +22,7 @@ void mergeCSVs() {
   compiling = readCSV(#lrel[int,num], |project://QL-LWC14/output/compile.csv|);
   csv = [];
   
-  num toS(int ns) = toReal(ns) / 1000000000.0;
+  num toS(num ns) = toReal(ns) / 1000000000.0;
   
   for (i <- [0..size(parsing)]) {
     csv += [<parsing[i][0], 
@@ -35,6 +35,10 @@ void mergeCSVs() {
 }
 
 void benchmarkAll() {
+  // trigger pgen
+  parse(#start[Form], "form bla {}");
+
+
   // Parse
   benchmarkIt(|project://QL-LWC14/output/parse.csv|,
     str(str src) { return src; },
@@ -75,6 +79,7 @@ map[int, num] benchmarkCompile() =
     Form(str src) {
       return parse(#start[Form], src).top;
     }, form2js);
+
 
 map[int, num] benchmarkIt(loc out, &T(str) pre, value(&T) doIt) {
   bm = ();  
