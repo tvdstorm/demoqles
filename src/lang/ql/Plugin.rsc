@@ -1,7 +1,7 @@
 module lang::ql::Plugin
 
 import lang::ql::QL;
-import lang::ql::Bind;
+import lang::ql::Resolve;
 import lang::ql::Check;
 import lang::ql::Outline;
 import lang::ql::Compile;
@@ -33,9 +33,7 @@ public void setupQL() {
 //    annotator(start[Form](start[Form] pt) {
     annotator(Tree(Tree pt) {
       if (Form f := pt.args[1]) {
-        f_and_defs = definitions(f);
-        f = bind(f_and_defs[0], f_and_defs[1]);
-        msgs = checkForm(f);
+        msgs = checkForm(f, resolve(f));
         pt.args[1] = f;
         lastMessages = msgs;
         return pt[@messages=msgs];
