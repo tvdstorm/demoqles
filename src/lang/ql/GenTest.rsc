@@ -2,7 +2,7 @@ module lang::ql::GenTest
 
 import IO;
 import lang::ql::QL;
-import lang::ql::Bind;
+import lang::ql::Resolve;
 import lang::ql::Check;
 import lang::ql::Types;
 import lang::ql::Compile;
@@ -48,29 +48,30 @@ void benchmarkAll() {
 
   benchmarkBind();
   
-  // Typecheck
-  benchmarkIt(|project://QL-LWC14/output/typecheck.csv|,
-    Form(str src) {
-      Tree pt = parse(#start[Form], src);
-      Form f = pt.top;
-      map[str, rel[loc, QLType]] defs = ();
-      <f, defs> = definitions(f);
-      return bind(f, defs);
-    }, checkForm);
      
 
   benchmarkCompile();
 }
+
+map[int,num] benchmarkCheck() =
+  benchmarkIt(|project://QL-LWC14/output/typecheck.csv|,
+    tuple[Form, Refs](str src) {
+      Tree pt = parse(#start[Form], src);
+      Form f = pt.top;
+      rs = resolve(f);
+      return <f, rs>;
+    }, value(tuple[Form, Refs] tup) {
+        return checkForm(tup[0], tup[1]);
+    });
 
 map[int, num] benchmarkBind() = 
   benchmarkIt(|project://QL-LWC14/output/bind.csv|,
     Form(str src) {
       return parse(#start[Form], src).top;
     },
-    Form(Form f) {
-      map[str, rel[loc, QLType]] defs = ();
-      <f, defs> = definitions(f);
-      return bind(f, defs);
+    tuple[Form, Refs](Form f) {
+      rs = resolve(f);
+      return <f, rs>;
     });
 
 
