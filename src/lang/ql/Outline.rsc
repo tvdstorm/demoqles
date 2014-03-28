@@ -15,11 +15,11 @@ node outline(Form f) {
  list[node] ls = [];
  
  void addQuestion(Question q) {
-   qn = "question"()[@label="<q.var>"][@\loc=q@\loc];
+   qn = "question"()[@label="<q.name>"][@\loc=q@\loc];
    qs += [qn]; 
    l = "<q.label>"[1..-1];
    ls += ["label"()[@label=l][@\loc=q.label@\loc]];
-   types += {<"<q.\type>", "<q.var>", q@\loc>}; 
+   types += {<"<q.\type>", "<q.name>", q@\loc>}; 
  }
  
  void addCond(Expr c) {

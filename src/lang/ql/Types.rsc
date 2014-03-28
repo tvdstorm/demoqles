@@ -8,7 +8,7 @@ data QLType
   | boolean()
   | money()
   | string()
-  | bottom()
+  | error()
   ;
   
 QLType qlType((Type)`boolean`) = boolean();
@@ -17,3 +17,8 @@ QLType qlType((Type)`integer`) = integer();
 QLType qlType((Type)`money`) = money();
   
 str type2str(QLType t) = getName(t);
+
+QLType combine(money(), QLType::integer()) = money();
+QLType combine(QLType::integer(), money()) = money();
+QLType combine(QLType t1, QLType t2) = t1 when t1 == t2;
+default QLType combine(QLType t1, QLType t2) = error();
