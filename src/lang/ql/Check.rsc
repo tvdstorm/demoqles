@@ -11,8 +11,8 @@ import ParseTree;
 import Relation;
 import Set;
 
-bool hasMultipleTypes(str x, Refs r) = size(declaredTypes(x, r)) > 1;
-bool hasDuplicateLabel(str l, Refs r) = size(r.labels[l]) > 1;
+bool hasMultipleTypes(Id x, Refs r) = size(declaredTypes(x, r)) > 1;
+bool hasDuplicateLabel(Label l, Refs r) = size(r.labels[l]) > 1;
 
 set[Message] checkForm(Form f, Refs refs) = tc(f, refs); // + detectCycles(f);
 
@@ -26,16 +26,16 @@ set[Message] tc((Question)`if (<Expr c>) <Question q1> else <Question q2>`, Refs
 set[Message] tc((Question)`{ <Question* qs> }`, Refs r) 
   = ( {} | it + tc(q, r) |  q <- qs );
 
-set[Message] tcq(Question q, Refs r)
-  = { error("Redeclared with different type", q@\loc) | hasMultipleTypes("<q.name>", r) }
-  + { warning("Duplicate label", q.label@\loc) | hasDuplicateLabel("<q.label>", r) }
+set[Message] tcq(Label l, Id n, Refs r)
+  = { error("Redeclared with different type", n@\loc) | hasMultipleTypes(n, r) }
+  + { warning("Duplicate label", l@\loc) | hasDuplicateLabel(l, r) }
   ;
 
-set[Message] tc(q:(Question)`<Label l> <Var n>: <Type t> = <Expr e>`, Refs r)
-  = tcq(q, r) + tc(e ,r);
+set[Message] tc(q:(Question)`<Label l> <Id n>: <Type t> = <Expr e>`, Refs r)
+  = tcq(l, n, r) + tc(e ,r);
 
-set[Message] tc(q:(Question)`<Label l> <Var n>: <Type t>`, Refs r)  
-  = tcq(q, r); 
+set[Message] tc(q:(Question)`<Label l> <Id n>: <Type t>`, Refs r)  
+  = tcq(l, n, r); 
 
 default set[Message] tc(Question q, Refs r) = {};
 

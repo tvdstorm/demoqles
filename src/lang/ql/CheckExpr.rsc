@@ -2,6 +2,7 @@ module lang::ql::CheckExpr
 
 import lang::ql::QL;
 import lang::ql::Types;
+import lang::ql::TypeOf;
 import lang::ql::Resolve;
 
 import Message;
@@ -17,7 +18,7 @@ import Set;
 set[Message] tc(Expr e, set[Message](list[QLType], loc) check, Refs r, Expr kids...) {
   ts = [ qlTypeOf(k, r) | k <- kids ];
   errs = ( {} | it + tc(k, r) | k <- kids );
-  if (bottom() notin ts) {
+  if (error() notin ts) {
     errs += check(ts, e@\loc);
   }
   return errs;
@@ -35,7 +36,7 @@ set[Message] checkString(list[QLType] ts, loc l)
 set[Message] checkEq(list[QLType] ts, loc l) 
   = { error("Incomparable types", l) | ts[0] != ts[1] }; 
 
-bool hasDeclaration(Id x, Refs r) = r.use[x@\loc]() != {};
+bool hasDeclaration(Id x, Refs r) = r.use[x@\loc] != {};
 
 set[Message] tc(e:(Expr)`<Id x>`, Refs r) 
   = {error("Undefined name", e@\loc) | !hasDeclaration(x, r) }; 

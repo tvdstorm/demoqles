@@ -4,10 +4,10 @@ import lang::ql::Types;
 import lang::ql::QL;
 import lang::ql::Resolve;
 
-set[QLType] declaredTypes(str x, Refs r) = x in r.def ? r.def[x]<1> : {}; 
+set[QLType] declaredTypes(Id x, Refs r) = x in r.def ? r.def[x]<1> : {}; 
  
 QLType qlTypeOf(e:(Expr)`<Id x>`, Refs r) = t 
-  when {QLType t} := declaredTypes("<x>", r);
+  when {QLType t} := declaredTypes(x, r);
    
 QLType qlTypeOf((Expr)`(<Expr e>)`, Refs r) = qlTypeOf(e, r);
 QLType qlTypeOf((Expr)`<Integer _>`, Refs r) = integer();

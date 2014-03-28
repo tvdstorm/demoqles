@@ -32,13 +32,10 @@ node outline(Form f) {
      addQuestion(q);
      es += ["expr"()[@label="<e>"][@\loc=e@\loc]];
    }
-   
-   case Question q: if (q has cond) addCond(q.cond);
-   
-   //case q:(Question)`if (<Expr c>) <Question q>`: 
-   //  addCond(c); 
-   //case q:(Question)`if (<Expr c>) <Question q1> else <Question q2>`: 
-   //  addCond(c); 
+   case q:(Question)`if (<Expr c>) <Question q>`: 
+     addCond(c); 
+   case q:(Question)`if (<Expr c>) <Question q1> else <Question q2>`: 
+     addCond(c); 
  }
 
  ts = for (t <- domain(types)) {
