@@ -1,6 +1,5 @@
 module lang::ql::Check
 
-
 import lang::ql::QL;
 import lang::ql::Types;
 import lang::ql::TypeOf;
