@@ -12,13 +12,13 @@ data QLType
   ;
   
 QLType qlType((Type)`boolean`) = boolean();
-QLType qlType((Type)`string`) = string();
+QLType qlType((Type)`string`)  = string();
 QLType qlType((Type)`integer`) = integer();
-QLType qlType((Type)`money`) = money();
+QLType qlType((Type)`money`)   = money();
   
 str type2str(QLType t) = getName(t);
 
-QLType combine(money(), QLType::integer()) = money();
-QLType combine(QLType::integer(), money()) = money();
-QLType combine(QLType t1, QLType t2) = t1 when t1 == t2;
-default QLType combine(QLType t1, QLType t2) = error();
+QLType lub(money(), QLType::integer()) = money();
+QLType lub(QLType::integer(), money()) = money();
+QLType lub(QLType t1, QLType t2) = t1 when t1 == t2;
+default QLType lub(QLType t1, QLType t2) = error();

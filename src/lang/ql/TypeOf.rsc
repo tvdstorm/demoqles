@@ -3,38 +3,35 @@ module lang::ql::TypeOf
 import lang::ql::Types;
 import lang::ql::QL;
 import lang::ql::Resolve;
+import ParseTree;
 
-set[QLType] declaredTypes(Id x, Refs r) = x in r.def ? r.def[x]<1> : {}; 
- 
-QLType qlTypeOf(e:(Expr)`<Id x>`, Refs r) = t 
-  when {QLType t} := declaredTypes(x, r);
+QLType numeric(Expr lhs, Expr rhs, Info i)
+  = lub(qlTypeOf(lhs, i), qlTypeOf(rhs, i));
+
+QLType qlTypeOf(e:(Expr)`<Id x>`, Info i) = t 
+  when
+    d <- i.refs.use[x@\loc], 
+    t <- i.refs.def[d];  
    
-QLType qlTypeOf((Expr)`(<Expr e>)`, Refs r) = qlTypeOf(e, r);
-QLType qlTypeOf((Expr)`<Integer _>`, Refs r) = integer();
-QLType qlTypeOf((Expr)`true`, Refs r) = boolean();
-QLType qlTypeOf((Expr)`false`, Refs r) = boolean();
-QLType qlTypeOf((Expr)`<String _>`, Refs r) = string();
-QLType qlTypeOf(n:(Expr)`!<Expr e>`, Refs r) = boolean();
+QLType qlTypeOf((Expr)`(<Expr e>)`, Info i) = qlTypeOf(e, i);
+QLType qlTypeOf((Expr)`<Integer _>`, Info i) = integer();
+QLType qlTypeOf((Expr)`true`, Info i) = boolean();
+QLType qlTypeOf((Expr)`false`, Info i) = boolean();
+QLType qlTypeOf((Expr)`<String _>`, Info i) = string();
+QLType qlTypeOf(n:(Expr)`!<Expr e>`, Info i) = boolean();
 
-QLType qlTypeOf(e:(Expr)`<Expr lhs> * <Expr rhs>`, Refs r)
-  = combine(qlTypeOf(lhs, r), qlTypeOf(rhs, r));
-
-QLType qlTypeOf(e:(Expr)`<Expr lhs> / <Expr rhs>`, Refs r)
-  = combine(qlTypeOf(lhs, r), qlTypeOf(rhs, r));
-
-QLType qlTypeOf(e:(Expr)`<Expr lhs> + <Expr rhs>`, Refs r)
-  = combine(qlTypeOf(lhs, r), qlTypeOf(rhs, r));
+QLType qlTypeOf(e:(Expr)`<Expr lhs> * <Expr rhs>`, Info i) = numeric(lhs, ihs, i);
+QLType qlTypeOf(e:(Expr)`<Expr lhs> / <Expr rhs>`, Info i) = numeric(lhs, ihs, i);
+QLType qlTypeOf(e:(Expr)`<Expr lhs> + <Expr rhs>`, Info i) = numeric(lhs, ihs, i);
+QLType qlTypeOf(e:(Expr)`<Expr lhs> - <Expr rhs>`, Info i) = numeric(lhs, ihs, i);
   
-QLType qlTypeOf(e:(Expr)`<Expr lhs> - <Expr rhs>`, Refs r)
-  = combine(qlTypeOf(lhs, r), qlTypeOf(rhs, r));
-  
-QLType qlTypeOf(e:(Expr)`<Expr lhs> \> <Expr rhs>`, Refs r)  = boolean();
-QLType qlTypeOf(e:(Expr)`<Expr lhs> \>= <Expr rhs>`, Refs r) = boolean();
-QLType qlTypeOf(e:(Expr)`<Expr lhs> \< <Expr rhs>`, Refs r)  = boolean();
-QLType qlTypeOf(e:(Expr)`<Expr lhs> \<= <Expr rhs>`, Refs r) = boolean();
-QLType qlTypeOf(e:(Expr)`<Expr lhs> == <Expr rhs>`, Refs r)  = boolean();
-QLType qlTypeOf(e:(Expr)`<Expr lhs> != <Expr rhs>`, Refs r)  = boolean();
-QLType qlTypeOf(e:(Expr)`<Expr lhs> && <Expr rhs>`, Refs r)  = boolean();
-QLType qlTypeOf(e:(Expr)`<Expr lhs> || <Expr rhs>`, Refs r)  = boolean();
+QLType qlTypeOf(e:(Expr)`<Expr lhs> \> <Expr rhs>`, Info i)  = boolean();
+QLType qlTypeOf(e:(Expr)`<Expr lhs> \>= <Expr rhs>`, Info i) = boolean();
+QLType qlTypeOf(e:(Expr)`<Expr lhs> \< <Expr rhs>`, Info i)  = boolean();
+QLType qlTypeOf(e:(Expr)`<Expr lhs> \<= <Expr rhs>`, Info i) = boolean();
+QLType qlTypeOf(e:(Expr)`<Expr lhs> == <Expr rhs>`, Info i)  = boolean();
+QLType qlTypeOf(e:(Expr)`<Expr lhs> != <Expr rhs>`, Info i)  = boolean();
+QLType qlTypeOf(e:(Expr)`<Expr lhs> && <Expr rhs>`, Info i)  = boolean();
+QLType qlTypeOf(e:(Expr)`<Expr lhs> || <Expr rhs>`, Info i)  = boolean();
 
-default QLType qlTypeOf(Expr _, Refs r) = QLType::error();
+default QLType qlTypeOf(Expr _, Info i) = QLType::error();
