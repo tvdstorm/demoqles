@@ -50,7 +50,7 @@ Info resolve(Form f) {
       addLabel(l, x@location);
       addDef(x, x@location, t);
     }
-    case question(l, x, t, e): {
+    case computed(l, x, t, e): {
       addLabel(l, x@location); 
       addDef(x, x@location, t);
     }
@@ -62,11 +62,11 @@ Info resolve(Form f) {
   return <<use, def>, labels>;
 }
 
-rel[loc,loc,str] computeXRef(Info i) 
-  = { <u, d, "<l>"> | <u, d> <- i.refs.use, <l, d> <- i.labels }; 
-
-map[loc, str] computeDocs(Info i) {
-  docs = { <u, "<l>"> | <u, d>  <- i.refs.use, <l, d> <- i.labels };
-  return ( k: intercalate("\n", toList(docs[k])) | k <- docs<0> );
-}
+//rel[loc,loc,str] computeXRef(Info i) 
+//  = { <u, d, "<l>"> | <u, d> <- i.refs.use, <l, d> <- i.labels }; 
+//
+//map[loc, str] computeDocs(Info i) {
+//  docs = { <u, "<l>"> | <u, d>  <- i.refs.use, <l, d> <- i.labels };
+//  return ( k: intercalate("\n", toList(docs[k])) | k <- docs<0> );
+//}
   

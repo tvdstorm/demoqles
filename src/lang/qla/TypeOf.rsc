@@ -2,6 +2,7 @@ module lang::qla::TypeOf
 
 import lang::qla::AST;
 import lang::qla::Resolve;
+import Node;
 
 // Extend with numeric and error
 data Type = numeric() | error();
