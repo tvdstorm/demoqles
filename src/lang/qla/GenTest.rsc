@@ -48,7 +48,7 @@ void benchmarkAll() {
     });
 
   benchmarkBind();
-  
+  benchmarkCheck();
   benchmarkCompile();
 }
 
