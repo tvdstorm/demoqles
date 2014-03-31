@@ -16,6 +16,9 @@ import String;
 import lang::csv::IO;
 import util::Math;
 
+private int MAXQ = 2001;
+private int STEP = 10;
+
 void mergeCSVs() {
   parsing = readCSV(#lrel[int,num], |project://QL-LWC14/output/parse.csv|);
   binding = readCSV(#lrel[int,num], |project://QL-LWC14/output/bind.csv|);
@@ -82,7 +85,7 @@ map[int, num] benchmarkCompile() =
 
 map[int, num] benchmarkIt(loc out, &T(str) pre, value(&T) doIt) {
   bm = ();  
-  for (i <- [0,10..2001]) {
+  for (i <- [0,STEP..MAXQ]) {
     println("i = <i>");
     src = binForm(1, i);
     &T t = pre(src);
