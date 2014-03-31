@@ -52,24 +52,43 @@ QLrt.BaseValueWidget = function (lazyValue) {
 QLrt.BaseValueWidget.prototype = Object.create(QLrt.Child.prototype);
 
 
+QLrt.uniqueId = 0;
+
 QLrt.BooleanValueWidget = function (lazyValue) {
 
 	QLrt.BaseValueWidget.call(this, lazyValue);
 
+	var selectTrue = null, selectFalse = null;
+
 	this.createElement = function () {
-		return QLrt.mk('input').attr('type', 'checkbox');
+		var span = QLrt.mk('span');
+		var currentUniqueId = QLrt.uniqueId++;
+		var groupId = 'boolean-widget-uid-' + currentUniqueId;
+		selectTrue = mkRadio(groupId, 'true');
+		selectFalse = mkRadio(groupId, 'false');
+		span.append(selectTrue, mkLabel('true', groupId + '_true'), selectFalse, mkLabel('false', groupId + '_false'));
+		return span;
 	};
 
+	function mkRadio (groupId, val) {
+		return QLrt.mk('input').attr('type', 'radio').attr('name', groupId).attr('id', groupId + '_' + val);
+	}
+
+	function mkLabel (labelText, id) {
+		return QLrt.mk('label').append(labelText).attr('for', id);
+	}
+
 	this.setValue = function (val) {
-		this.domElement().prop('checked', val);
+		selectTrue.prop('checked', val);
+		selectFalse.prop('checked', !val);
 	};
 
 	this.valueInternal = function () {
-		return this.domElement().prop('checked');
+		return selectTrue.prop('checked');
 	};
 
 	this.definedInternal = function () {
-		return true;
+		return selectTrue.prop('checked') || selectFalse.prop('checked');
 	};
 
 };
