@@ -7,25 +7,25 @@ import ParseTree;
 import List;
 import Set;
 
-alias Use = rel[loc use, loc def];
-alias Def = rel[loc def, Type typ];
+alias Use = map[loc use, set[loc] defs];
+alias Def = map[loc def, set[Type] types];
 
 alias Refs = tuple[Use use, Def def];
 
-alias Labels = rel[str label, loc question];
+alias Labels = map[str label, set[loc] questions];
 alias Info = tuple[Refs refs, Labels labels];
 
 Info resolve(Form f) {
   // Lazy because of declare after use.
   map[loc, set[loc]()] useLazy = ();
-  Def def = {};
-  Labels labels = {};
+  Def def = ();
+  Labels labels = ();
   
-  rel[Id, loc] env = {};	
+  map[Id, set[loc]] env = ();	
   
   // Return a function that looks up declaration of `n` in defs when called.
   set[loc]() lookup(Id n) 
-    = set[loc]() { return env[n]; };
+    = set[loc]() { return env[n]? ? env[n] : {}; };
 
 
   void addUse(loc l, Id name) {
@@ -33,12 +33,15 @@ Info resolve(Form f) {
   }
   
   void addLabel(str label, loc l) {
-    labels += {<label, l>};
+    if (!labels[label]?) labels[label] = {};
+    labels[label] += {l};
   }
   
   void addDef(Id n, loc q, Type t) {
-    env += {<n, q>};
-    def += {<q, t>};
+    if (!env[n]?) env[n] = {};
+    if (!def[q]?) def[q] = {};
+    env[n] += {q};
+    def[q] += {t};
   }
   
   visit (f) {
@@ -47,23 +50,23 @@ Info resolve(Form f) {
       addLabel(l, x@location);
       addDef(x, x@location, t);
     }
-    case question(l, x, t, e): {
+    case computed(l, x, t, e): {
       addLabel(l, x@location); 
       addDef(x, x@location, t);
     }
   }
   
   // Force the closures in `use` to resolve references.
-  use = { <u, d> | u <- useLazy, d <- useLazy[u]() };
+  use = ( u: useLazy[u]() | u <- useLazy );
   
   return <<use, def>, labels>;
 }
 
-rel[loc,loc,str] computeXRef(Info i) 
-  = { <u, d, "<l>"> | <u, d> <- i.refs.use, <l, d> <- i.labels }; 
-
-map[loc, str] computeDocs(Info i) {
-  docs = { <u, "<l>"> | <u, d>  <- i.refs.use, <l, d> <- i.labels };
-  return ( k: intercalate("\n", toList(docs[k])) | k <- docs<0> );
-}
+//rel[loc,loc,str] computeXRef(Info i) 
+//  = { <u, d, "<l>"> | <u, d> <- i.refs.use, <l, d> <- i.labels }; 
+//
+//map[loc, str] computeDocs(Info i) {
+//  docs = { <u, "<l>"> | <u, d>  <- i.refs.use, <l, d> <- i.labels };
+//  return ( k: intercalate("\n", toList(docs[k])) | k <- docs<0> );
+//}
   

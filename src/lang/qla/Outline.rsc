@@ -15,29 +15,29 @@ node outline(Form f) {
  list[node] ls = [];
  
  void addQuestion(Question q) {
-   qn = "question"()[@label="<q.name>"][@location=q@location];
+   qn = "question"()[@label="<q.name>"][@\loc=q@location];
    qs += [qn]; 
    l = "<q.label>"[1..-1];
-   ls += ["label"()[@label=l][@location=q@location]];
+   ls += ["label"()[@label=l][@\loc=q@location]];
    types += {<"<q.tipe>", "<q.name>", q@location>}; 
  }
  
  void addCond(Expr c) {
-   cs += ["cond"()[@label="<c>"][@location=c@location]];
+   cs += ["cond"()[@label="<c>"][@\loc=c@location]];
  }
  
  top-down visit (f) {
    case q:question(_, _, _): addQuestion(q);
-   case q:question(_, _, _, e): {
+   case q:computed(_, _, _, e): {
      addQuestion(q);
-     es += ["expr"()[@label="<e>"][@location=e@location]];
+     es += ["expr"()[@label="<e>"][@\loc=e@location]];
    }
    case ifThen(c, _):  addCond(c); 
    case ifThenElse(c, _, _): addCond(c); 
  }
 
  ts = for (t <- domain(types)) {
-   subqs = [ "q"()[@label=qn][@location=ql] | <str qn, loc ql> <- types[t] ];
+   subqs = [ "q"()[@label=qn][@\loc=ql] | <str qn, loc ql> <- types[t] ];
    append "type"(subqs)[@label=capitalize(t)];
  }
 

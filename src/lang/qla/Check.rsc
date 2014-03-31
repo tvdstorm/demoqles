@@ -32,9 +32,11 @@ set[Message] tcq(str l, Id n, Info i)
   + { warning("Duplicate label", n@location) | hasDuplicateLabel(l, i) }
   ;
 
-bool hasMultipleTypes(loc x, Info i) = size(i.refs.def[x]) > 1;
+bool hasMultipleTypes(loc x, Info i) = 
+  x in i.refs.def ? size(i.refs.def[x]) > 1 : false;
 
-bool hasDuplicateLabel(str l, Info i) = size(i.labels[l]) > 1;
+bool hasDuplicateLabel(str l, Info i) = 
+  l in i.labels ? size(i.labels[l]) > 1 : false;
 
 
 //set[str] uses(Question q) = { "<x>" | /(Expr)`<Id x>` := q };
