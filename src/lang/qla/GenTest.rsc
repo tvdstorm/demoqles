@@ -24,7 +24,7 @@ void mergeCSVs() {
   csv = [];
   
   num toS(num ns) = toReal(ns) / 1000000000.0;
-  
+  println(size(parsing));
   for (i <- [0..size(parsing)]) {
     csv += [<parsing[i][0], 
              toS(parsing[i][1]), 
@@ -82,7 +82,7 @@ map[int, num] benchmarkCompile() =
 
 map[int, num] benchmarkIt(loc out, &T(str) pre, value(&T) doIt) {
   bm = ();  
-  for (i <- [0,10..1001]) {
+  for (i <- [0,10..2001]) {
     println("i = <i>");
     src = binForm(1, i);
     &T t = pre(src);
