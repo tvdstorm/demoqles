@@ -5,9 +5,15 @@ import lang::qla::AST;
 import lang::qla::QL;
 import ParseTree;
 
-lang::qla::AST::Form load(loc l) = implodeQL(parseQL(l).top);
-lang::qla::AST::Form load(str src) = implodeQL(parseQL(src).top);
+//lang::qla::AST::Form load(loc l) = implodeQL(parseQL(l).top);
+//lang::qla::AST::Form load(str src) = implodeQL(parseQL(src).top);
+//
+//lang::qla::AST::Form implodeQL(lang::qla::QL::Form f) 
+//  = implode(#lang::qla::AST::Form, f);
+  
+  
+lang::qla::AST::Form load(loc l) = implodeQL(parseQL(l));
+lang::qla::AST::Form load(str src) = implodeQL(parseQL(src));
 
-
-lang::qla::AST::Form implodeQL(lang::qla::QL::Form f) 
+lang::qla::AST::Form implodeQL(Tree f) 
   = implode(#lang::qla::AST::Form, f);
