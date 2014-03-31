@@ -1,8 +1,8 @@
 module lang::qla::Lexical
 
-lexical Label = @category="Constant" label: String; 
+lexical Label = @category="Constant" String; 
   
-syntax Type
+syntax QType
   = boolean: "boolean" 
   | string: "string"
   | integer: "integer"

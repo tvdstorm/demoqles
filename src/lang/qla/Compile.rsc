@@ -50,7 +50,7 @@ str question2decl(question(l, v, t), str parent)
 str question2decl(computed(l, v, t, e), str parent)
   = question2widget(l, v, t, parent, exp2lazyValue(e));
 
-str question2widget(str l, Id v, Type t, str parent, str e)
+str question2widget(str l, Id v, QType t, str parent, str e)
   = "var <v> = new QLrt.SimpleFormElementWidget({
     '  name: \"<v>\", 
     '  label: <l>,
@@ -70,10 +70,10 @@ str exp2lazyValue(Expr e)
 
 str nameFor(Question q) = "q<q@location.offset>";
 
-str type2widget(Type::boolean()) = "BooleanValueWidget";
-str type2widget(Type::money())   = "MoneyValueWidget";
-str type2widget(Type::string())  = "StringValueWidget";
-str type2widget(Type::integer()) = "IntegerValueWidget";
+str type2widget(QType::boolean()) = "BooleanValueWidget";
+str type2widget(QType::money())   = "MoneyValueWidget";
+str type2widget(QType::string())  = "StringValueWidget";
+str type2widget(QType::integer()) = "IntegerValueWidget";
 
 list[str] freeVars(Expr e) =  [ "<x>" | /Id x := e ];
 

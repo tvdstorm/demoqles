@@ -13,17 +13,17 @@ import util::Benchmark;
 import Set;
 import List;
 import String;
-import lang::csv::IO;
+import ValueIO;
 import util::Math;
 
-private int MAXQ = 2001;
+private int MAXQ = 10;
 private int STEP = 10;
 
 void mergeCSVs() {
-  parsing = readCSV(#lrel[int,num], |project://QL-LWC14/output/parse.csv|);
-  binding = readCSV(#lrel[int,num], |project://QL-LWC14/output/bind.csv|);
-  checking = readCSV(#lrel[int,num], |project://QL-LWC14/output/typecheck.csv|);
-  compiling = readCSV(#lrel[int,num], |project://QL-LWC14/output/compile.csv|);
+  parsing = readTextValueFile(#lrel[int,num], |project://QL-LWC14/output/parse.csv|);
+  binding = readTextValueFile(#lrel[int,num], |project://QL-LWC14/output/bind.csv|);
+  checking = readTextValueFile(#lrel[int,num], |project://QL-LWC14/output/typecheck.csv|);
+  compiling = readTextValueFile(#lrel[int,num], |project://QL-LWC14/output/compile.csv|);
   csv = [];
   
   num toS(num ns) = toReal(ns) / 1000000000.0;
@@ -35,7 +35,26 @@ void mergeCSVs() {
              toS(checking[i][1]), 
              toS(compiling[i][1])>]; 
   }
-  writeCSV(csv, |project://QL-LWC14/output/benchmarks.csv|); 
+  myWriteCSV(csv, |project://QL-LWC14/output/benchmarks.csv|); 
+}
+
+void myWriteCSV(lrel[num, num, num, num, num] csv, loc out) {
+  bool first = true;
+  for (<a, b, c, d, e> <- csv) {
+    line = "<a>,<b>,<c>,<d>,<e>\n";
+    if (first) {
+      writeFile(out, line);
+      first = false;
+    }
+    else {
+      appendToFile(out, line);
+    }
+  }
+}
+
+
+void main(list[value] args) {
+  benchmarkAll();
 }
 
 void benchmarkAll() {
@@ -46,8 +65,9 @@ void benchmarkAll() {
   // Parse
   benchmarkIt(|project://QL-LWC14/output/parse.csv|,
     str(str src) { return src; },
-    start[Form](str src) {
-      return parseQL(src);
+    void(str src) {
+      // bug in type checker? Assign does not work.
+      parseQL(src);
     });
 
   benchmarkBind();
@@ -93,9 +113,10 @@ map[int, num] benchmarkIt(loc out, &T(str) pre, value(&T) doIt) {
   }
 
   csv = [ <k, bm[k]> | k <- sort(toList(bm<0>))];
-  writeCSV(csv, out);
+  writeTextValueFile(out, csv);
   return bm;
 }
+
 
 
 str binForm(int min, int max) {

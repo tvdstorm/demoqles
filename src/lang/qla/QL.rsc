@@ -7,8 +7,8 @@ start syntax Form
   ;
 
 syntax Question
-  = question: Label label Id name ":" Type type
-  | computed: Label label Id name ":" Type type "=" Expr expr
+  = question: Label label Id name ":" QType type
+  | computed: Label label Id name ":" QType type "=" Expr expr
   | ifThen: "if" "(" Expr cond ")" Question () !>> "else"
   | ifThenElse: "if" "(" Expr cond ")" Question question "else" Question elseQuestion
   | @Foldable group: "{" Question* questions "}"

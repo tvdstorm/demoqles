@@ -8,7 +8,7 @@ import List;
 import Set;
 
 alias Use = map[loc use, set[loc] defs];
-alias Def = map[loc def, set[Type] types];
+alias Def = map[loc def, set[QType] types];
 
 alias Refs = tuple[Use use, Def def];
 
@@ -37,7 +37,7 @@ Info resolve(Form f) {
     labels[label] += {l};
   }
   
-  void addDef(Id n, loc q, Type t) {
+  void addDef(Id n, loc q, QType t) {
     if (!env[n]?) env[n] = {};
     if (!def[q]?) def[q] = {};
     env[n] += {q};

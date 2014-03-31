@@ -10,7 +10,7 @@ import Set;
 
 //Helper function to do automatic calling of tc on sub-expressions
 // and to prevent type-checking if the sub-expressions have errors.
-set[Message] tc(Expr e, Type mgt, Info i, Expr kids...) {
+set[Message] tc(Expr e, QType mgt, Info i, Expr kids...) {
   errs = ( {} | it + tc(k, i) | k <- kids );
   if (errs == {}) {
     return {error("Invalid operand type (expected <type2str(mgt)>)", k@location)
