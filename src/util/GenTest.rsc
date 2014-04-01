@@ -1,4 +1,4 @@
-module lang::qla::GenTest
+module util::GenTest
 
 import IO;
 import lang::qla::AST;

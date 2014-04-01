@@ -21,13 +21,13 @@ Tree value2tree(Symbol x, value v, map[Symbol, Production] defs) {
   if (x is label) {
     x = x.symbol;
   }
-  println("X = <x>");
+  //println("X = <x>");
   if (node ast := v) {
     alts = defs[x].alternatives;
     for (/p:prod(label(n, _), _, _) <- alts) {
       //println("p = <p>");
       if (n == getName(ast)) {
-        println("FOUND ****************** <n>");
+        //println("FOUND ****************** <n>");
         return value2tree(p, ast, defs); 
       }
     }
@@ -47,16 +47,18 @@ Tree value2tree(Symbol x, value v, map[Symbol, Production] defs) {
 
 
 Tree list2regular(iter:\iter-star-seps(s, seps), list[value] vs, map[Symbol, Production] defs) {
-  println("values = <vs>");
+  //println("values = <vs>");
   int last = size(vs) - 1;
   i = 0;
   as = [];
-  for (v <- vs) {
-     as += [value2tree(s, v, defs)];
+  as = args: for (v <- vs) {
+     //as += [value2tree(s, v, defs)];
+     append value2tree(s, v, defs);
      if (i < last) {
        for (Symbol sep <- seps) {
-         println("ADDDING SEP ------------ <sep>");
-         as += [sym2default(sep)];
+         //println("ADDDING SEP ------------ <sep>");
+         //as += [sym2default(sep)];
+         append args: sym2default(sep);
        }
      }
      i += 1;
@@ -73,16 +75,18 @@ list[Tree] zipIt(list[Symbol] syms, list[value] args, map[Symbol, Production] de
   //println("SYMS = <syms>");
   i = 0;
   ts = []; 
-  for (s <- syms) {
+  ts = for (s <- syms) {
     //println("sym = <s>");
     if (isASTsymbol(s)) {
-      println("<s> = it\'s ast");
-      ts += [value2tree(s, args[i], defs)];
+      //println("<s> = it\'s ast");
+      //ts += [value2tree(s, args[i], defs)];
+      append value2tree(s, args[i], defs);
       i += 1;
     }
     else {
       ////println("it\'s not");
-      ts += [sym2default(s)];
+      //ts += [sym2default(s)];
+      append sym2default(s);
     }
   }
   return ts;

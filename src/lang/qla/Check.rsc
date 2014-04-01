@@ -9,7 +9,7 @@ import Relation;
 import Set;
 import IO;
 
-set[Message] checkForm(Form f, Info i) = tc(f, i); // + detectCycles(f);
+set[Message] checkForm(Form f, Info i) = tc(f, i); 
 
 set[Message] tc(Form f, Info i) = ( {} | it + tc(q, i) | q <- f.body );
 
@@ -38,11 +38,3 @@ bool hasMultipleTypes(loc x, Info i) =
 bool hasDuplicateLabel(str l, Info i) = 
   l in i.labels ? size(i.labels[l]) > 1 : false;
 
-
-//set[str] uses(Question q) = { "<x>" | /(Expr)`<Id x>` := q };
-//  
-//set[str] defs(Question q) = { "<x>" | /Var x := q };
-
-//set[Message] detectCycles(Form f) 
-//  = { error("Cycle involving <x>", f.name@\loc) | x <- carrier(g), <x, x> in g }
-//  when g := ( {} | it + defs(q) * uses(q) | q <- flatten(f) )+;

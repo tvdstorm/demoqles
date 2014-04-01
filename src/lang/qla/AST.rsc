@@ -47,8 +47,3 @@ data Id = id(str name);
 anno loc Id@location;
 anno loc Expr@location;
 anno loc Question@location;
-
-anno map[int, list[str]] Form@comments;
-anno map[int, list[str]] Question@comments;
-anno map[int, list[str]] Expr@comments;
-
