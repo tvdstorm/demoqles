@@ -13,53 +13,40 @@ import util::IDE;
 import Message;
 import IO;
 
-private str DEMO_QL ="DemoQL";
-private str DEMO_QLS ="DemoQLS";
+private str QLA ="QL";
 
 anno rel[loc,loc, str] Tree@hyperlinks;
 
 public void setupQL() {
-  registerLanguage(DEMO_QL, "dql", Tree(str src, loc l) {
-    return parse(#start[Form], src, l);
+  registerLanguage(QLA, "dql", Tree(str src, loc l) {
+    return parseQL(src, l);
   });
   
   
   contribs = {
-     outliner(node(Tree pt) {
-      if (Form f := pt.args[1]) {
-        return outline(f);
-      }
-      throw "Error: not a form";
+    outliner(node(Tree pt) {
+      return outline(implodeQL(pt));
     }),
     
-//    annotator(start[Form](start[Form] pt) {
     annotator(Tree(Tree pt) {
-      if (Form f := pt.args[1]) {
-        r = resolve(f);
-        msgs = checkForm(f, r);
-        pt.args[1] = f;
-        //[@docStrings=computeDocs(r)]
-        return pt[@messages=msgs][@hyperlinks=computeXRef(r)];
-      }
-      return pt[@messages={error("BUG: not a form", pt@\loc)}];
+      ast = implodeQL(pt);
+      msgs = checkForm(ast, resolve(ast));
+      return pt[@messages=msgs]; //[@hyperlinks=computeXRef(r)];
     }),
     
     builder(set[Message] (Tree pt) {
-      if (Form f := pt.args[1]) {
-        r = resolve(f);
-        msgs = checkForm(f, r);
-        if (msgs == {}) {
-          js = pt@\loc[extension="js"];
-          writeFile(js, form2js(f));
-          html = pt@\loc[extension="html"];
-          writeFile(html, form2html(f, js));
-        }
-        return msgs;
+      ast = implodeQL(pt);
+      msgs = checkForm(ast, resolve(ast));
+      if (msgs == {}) {
+        js = pt@\loc[extension="js"];
+        writeFile(js, form2js(f));
+        html = pt@\loc[extension="html"];
+        writeFile(html, form2html(f, js));
       }
-      return {error("BUG: Not a form", pt@\loc)};
+      return msgs;
     })
   };
   
-  registerContributions(DEMO_QL, contribs);
+  registerContributions(QLA, contribs);
 }
 

@@ -9,3 +9,4 @@ import ParseTree;
 
 Tree parseQL(loc l) = parse(#Form, l);
 Tree parseQL(str src) = parse(#Form, src);
+Tree parseQL(str src, loc l) = parse(#Form, src, l);
