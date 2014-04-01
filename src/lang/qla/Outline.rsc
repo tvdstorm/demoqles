@@ -1,7 +1,7 @@
 module lang::qla::Outline
 
 import lang::qla::AST;
-import lang::qla::FormatExp;
+import lang::qla::FormatExpr;
 import util::IDE;
 import ParseTree;
 import Relation;

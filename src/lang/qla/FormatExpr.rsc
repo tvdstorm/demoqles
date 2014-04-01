@@ -1,4 +1,4 @@
-module lang::qla::FormatExp
+module lang::qla::FormatExpr
 
 import lang::qla::Priorities;
 import lang::qla::AST;
