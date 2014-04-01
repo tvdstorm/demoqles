@@ -3,6 +3,7 @@ module lang::qla::Format
 import lang::qla::Priorities;
 import lang::qla::AST;
 import List;
+import IO;
 
 str format(f:form(n, qs)) = "form <n> {
                             '  <withComments(2, f@comments, qs)>
@@ -29,6 +30,8 @@ str format(g:group(qs))
 
 str withComments(int offset, map[int,list[str]] cs, list[Question] qs) {
   result = "";
+  println("Comments:");
+  iprintln(cs);
   for (i <- [0..size(qs)]) {
     if (i + offset in cs) {
       result += intercalate("\n", cs[i+offset]) + "\n";
