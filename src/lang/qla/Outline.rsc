@@ -1,11 +1,18 @@
 module lang::qla::Outline
 
 import lang::qla::AST;
+import lang::qla::FormatExp;
 import util::IDE;
 import ParseTree;
 import Relation;
 import List;
 import String;
+
+str format(QType::boolean()) = "boolean";
+str format(QType::integer()) = "integer";
+str format(QType::money()) = "money";
+str format(QType::string()) = "string";
+
 
 node outline(Form f) {
  list[node] qs = [];
@@ -15,22 +22,22 @@ node outline(Form f) {
  list[node] ls = [];
  
  void addQuestion(Question q) {
-   qn = "question"()[@label="<q.name>"][@\loc=q@location];
+   qn = "question"()[@label="<q.name.name>"][@\loc=q@location];
    qs += [qn]; 
    l = "<q.label>"[1..-1];
    ls += ["label"()[@label=l][@\loc=q@location]];
-   types += {<"<q.tipe>", "<q.name>", q@location>}; 
+   types += {<format(q.tipe), "<q.name.name>", q@location>}; 
  }
  
  void addCond(Expr c) {
-   cs += ["cond"()[@label="<c>"][@\loc=c@location]];
+   cs += ["cond"()[@label=format(c)][@\loc=c@location]];
  }
  
  top-down visit (f) {
    case q:question(_, _, _): addQuestion(q);
    case q:computed(_, _, _, e): {
      addQuestion(q);
-     es += ["expr"()[@label="<e>"][@\loc=e@location]];
+     es += ["expr"()[@label=format(e)][@\loc=e@location]];
    }
    case ifThen(c, _):  addCond(c); 
    case ifThenElse(c, _, _): addCond(c); 

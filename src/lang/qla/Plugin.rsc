@@ -39,9 +39,9 @@ public void setupQL() {
       msgs = checkForm(ast, resolve(ast));
       if (msgs == {}) {
         js = pt@\loc[extension="js"];
-        writeFile(js, form2js(f));
+        writeFile(js, form2js(ast));
         html = pt@\loc[extension="html"];
-        writeFile(html, form2html(f, js));
+        writeFile(html, form2html(ast, js));
       }
       return msgs;
     })
