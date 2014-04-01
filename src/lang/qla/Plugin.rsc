@@ -17,6 +17,10 @@ private str QLA ="QL";
 
 anno rel[loc,loc, str] Tree@hyperlinks;
 
+rel[loc,loc,str] computeXRef(Info i) 
+  = { <u, d, "<l>"> | u <- i.refs.use, d <- i.refs.use[u], 
+                      l <- i.labels, d in i.labels[l] }; 
+
 public void setupQL() {
   registerLanguage(QLA, "dql", Tree(str src, loc l) {
     return parseQL(src, l);
@@ -50,9 +54,5 @@ public void setupQL() {
   
   registerContributions(QLA, contribs);
 }
-
-rel[loc,loc,str] computeXRef(Info i) 
-  = { <u, d, "<l>"> | u <- i.refs.use, d <- i.refs.use[u], 
-                      l <- i.labels, d in i.labels[l] }; 
 
 

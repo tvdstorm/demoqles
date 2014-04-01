@@ -9,7 +9,6 @@ syntax QType
   | money: "money"
   ;
 
-
 lexical String = [\"] StrChar* [\"];
 
 lexical StrChar
