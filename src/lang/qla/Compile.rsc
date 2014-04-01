@@ -51,8 +51,8 @@ str question2decl(computed(l, v, t, e), str parent)
   = question2widget(l, v, t, parent, exp2lazyValue(e));
 
 str question2widget(str l, Id v, QType t, str parent, str e)
-  = "var <v> = new QLrt.SimpleFormElementWidget({
-    '  name: \"<v>\", 
+  = "var <v.name> = new QLrt.SimpleFormElementWidget({
+    '  name: \"<v.name>\", 
     '  label: <l>,
     '  valueWidget: new QLrt.<type2widget(t)>(<e>) 
     '}).appendTo(<parent>);";
@@ -75,7 +75,7 @@ str type2widget(QType::money())   = "MoneyValueWidget";
 str type2widget(QType::string())  = "StringValueWidget";
 str type2widget(QType::integer()) = "IntegerValueWidget";
 
-list[str] freeVars(Expr e) =  [ "<x>" | /Id x := e ];
+list[str] freeVars(Expr e) =  [ x.name | /Id x := e ];
 
 str expParams(Expr e) = intercalate(", ", freeVars(e));
   

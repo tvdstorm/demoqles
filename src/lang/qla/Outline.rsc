@@ -7,16 +7,13 @@ import ParseTree;
 import Relation;
 import List;
 import String;
+import Node;
 
-str format(QType::boolean()) = "boolean";
-str format(QType::integer()) = "integer";
-str format(QType::money()) = "money";
-str format(QType::string()) = "string";
-
+str type2str(QType t) = getName(t);
 
 node outline(Form f) {
- list[node] qs = [];
  rel[str, str, loc] types = {};
+ list[node] qs = [];
  list[node] es = [];
  list[node] cs = []; 
  list[node] ls = [];
@@ -26,7 +23,7 @@ node outline(Form f) {
    qs += [qn]; 
    l = "<q.label>"[1..-1];
    ls += ["label"()[@label=l][@\loc=q@location]];
-   types += {<format(q.tipe), "<q.name.name>", q@location>}; 
+   types += {<type2str(q.tipe), "<q.name.name>", q@location>}; 
  }
  
  void addCond(Expr c) {

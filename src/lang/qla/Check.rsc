@@ -28,7 +28,6 @@ set[Message] tc(question(l, n, _), Info i) = tcq(l, n, i);
 
 set[Message] tcq(str l, Id n, Info i)
   = { error("Redeclared with different type", n@location) | hasMultipleTypes(n@location, i) }
-  // TODO label location
   + { warning("Duplicate label", n@location) | hasDuplicateLabel(l, i) }
   ;
 

@@ -7,16 +7,16 @@
 }
 @contributor{Tijs van der Storm - Tijs.van.der.Storm@cwi.nl}
 
-module lang::qla::Priorities
+module util::Priorities
 
 import Grammar;
 import Node;
 import lang::rascal::grammar::definition::Priorities;
 import IO;
+import ParseTree;
 import List;
-import lang::qla::QL;
 
-DoNotNest qlPriorities() = doNotNest(grammar({}, (#Form).definitions));
+DoNotNest prioritiesOf(type[&T] t) = doNotNest(grammar({}, t.definitions));
 
 default &T parens(DoNotNest prios, node parent, node kid, &T x,  &T(&T x) parenizer) = x;
 

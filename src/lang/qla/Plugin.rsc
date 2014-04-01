@@ -30,8 +30,9 @@ public void setupQL() {
     
     annotator(Tree(Tree pt) {
       ast = implodeQL(pt);
-      msgs = checkForm(ast, resolve(ast));
-      return pt[@messages=msgs]; //[@hyperlinks=computeXRef(r)];
+      inf = resolve(ast);
+      msgs = checkForm(ast, inf);
+      return pt[@messages=msgs][@hyperlinks=computeXRef(inf)];
     }),
     
     builder(set[Message] (Tree pt) {
@@ -49,4 +50,9 @@ public void setupQL() {
   
   registerContributions(QLA, contribs);
 }
+
+rel[loc,loc,str] computeXRef(Info i) 
+  = { <u, d, "<l>"> | u <- i.refs.use, d <- i.refs.use[u], 
+                      l <- i.labels, d in i.labels[l] }; 
+
 

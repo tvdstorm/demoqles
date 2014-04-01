@@ -61,12 +61,3 @@ Info resolve(Form f) {
   
   return <<use, def>, labels>;
 }
-
-//rel[loc,loc,str] computeXRef(Info i) 
-//  = { <u, d, "<l>"> | <u, d> <- i.refs.use, <l, d> <- i.labels }; 
-//
-//map[loc, str] computeDocs(Info i) {
-//  docs = { <u, "<l>"> | <u, d>  <- i.refs.use, <l, d> <- i.labels };
-//  return ( k: intercalate("\n", toList(docs[k])) | k <- docs<0> );
-//}
-  
