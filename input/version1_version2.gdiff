@@ -1,0 +1,15 @@
+diff {
+  source = /input/version1.dql
+  target = /input/version2.dql
+  syntax = lang::qla::QL
+  
+  replace Id (5,3) with [[Bar]](5,3)
+  replace Label (13,19) with [["Wat is je leeftijd?"]](13,21)
+  delete Question 1 in (13,91)
+  delete Question 2 in (13,91)
+  insert Question [["Another" x: integer]](59,20) at 1 in (13,91)
+  insert Question [[if (age > 18) {
+      "Yet another" z: integer
+    }
+  ]](85,49) at 2 in (13,91)
+}

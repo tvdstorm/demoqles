@@ -8,12 +8,16 @@ import lang::qla::Outline;
 import lang::qla::Compile;
 
 
+import diff::PTDiff;
+import diff::DiffAST;
 import diff::IDE;
 import ParseTree;
 import util::IDE;
 import Message;
 import IO;
 import lang::qla::QL;
+import util::Prompt;
+import util::Editors;
 
 private str QLA ="QL";
 
@@ -51,7 +55,23 @@ public void setupQL() {
         writeFile(html, form2html(ast, js));
       }
       return msgs;
-    })
+    }),
+    
+    popup(action("Structure diff...", 
+       void (Tree pt1, loc selLoc) {
+         loc v1 = pt1@\loc;
+         path = prompt("Compare with (project local path):");
+         loc v2 = |project://QL-LWC14/<path>|;
+         try {
+           pt2 = parseQL(v2);
+           d = ptDiff(pt1, pt2, "lang::qla::QL");
+           diffLoc = v1[file="<v1[extension=""].file>_<v2[extension=""].file>"][extension="gdiff"];
+           writeFile(diffLoc, ppDiff(d));
+           edit(diffLoc, []);
+         }
+         catch value error:
+           alert("Error: <error>");
+       }))
   };
   
   registerContributions(QLA, contribs);
