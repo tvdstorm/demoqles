@@ -1,6 +1,6 @@
 module lang::qla::Format
 
-import util::Box;
+import lang::box::util::SimpleBox;
 import lang::qla::AST;
 import Node;
 import lang::qla::FormatExpr;

@@ -1,6 +1,7 @@
 module lang::qla::FormatExpr
 
-import util::Priorities;
+import util::Brackets;
+import lang::qla::Parse;
 import lang::qla::AST;
 
 str format(Expr::integer(n)) = "<n>";
@@ -27,7 +28,7 @@ str format(e:geq(x, y)) = "<formatP(e,x)> \>= <formatP(e, y)>";
 str parenizer(str x) = "(<x>)";
 
 str parens(node parent, node kid, str x)
-  = parens(prioritiesOf(#Form), parent, kid, x, parenizer);
+  = parens(qlPriorities(), parent, kid, x, parenizer);
 
 str formatP(Expr parent, Expr kid)
   = parens(parent, kid, format(kid));
