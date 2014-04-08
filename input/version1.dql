@@ -1,0 +1,10 @@
+form Foo {
+  "What is your age?"
+    age: integer
+  
+  "Another" y: integer
+
+  if (age > 18) {
+    
+  }
+}

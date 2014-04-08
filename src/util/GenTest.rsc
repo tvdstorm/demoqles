@@ -119,26 +119,21 @@ map[int, num] benchmarkIt(loc out, &T(str) pre, value(&T) doIt) {
 
 
 
-str binForm(int min, int max) {
-  return "form binary {
-         '  <recBin(min, max)>
-         '}"; 
-}
+str binForm(int min, int max) 
+  = "form binary {
+    '  <binFormRec(min, max)>
+   '}"; 
 
-str recBin(int min, int max) {
-  //println("min = <min>, max = <max>");
+str binFormRec(int min, int max) 
+  = "\"The answer is\" answer_<min>_<max>: integer = (<min>)"
+  when max - min <= 1;
 
-  if (max - min <= 1) {
-    return "\"The answer is\" answer_<min>_<max>: integer = (<min>)";
-  }
-
-  half = min + ((max - min) / 2);
-  
-  return "\"Is the number between <min> and <half>\" x_<min>_<half>: boolean
-         'if (x_<min>_<half>) { 
-         '  <recBin(min, half)>
-         '}
-         'else { 
-         '  <recBin(half, max)>
-         '}";
-}
+default str binFormRec(int min, int max)
+  = "\"Is the number between <min> and <half>\" x_<min>_<half>: boolean
+    'if (x_<min>_<half>) { 
+    '  <binFormRec(min, half)>
+    '}
+    'else { 
+    '  <binFormRec(half, max)>
+    '}"
+  when half := min + ((max - min) / 2);

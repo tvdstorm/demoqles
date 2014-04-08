@@ -8,10 +8,12 @@ import lang::qla::Outline;
 import lang::qla::Compile;
 
 
+import diff::IDE;
 import ParseTree;
 import util::IDE;
 import Message;
 import IO;
+import lang::qla::QL;
 
 private str QLA ="QL";
 
@@ -53,6 +55,8 @@ public void setupQL() {
   };
   
   registerContributions(QLA, contribs);
+  
+  setupDiffIDE(#Form, "QL-LWC14");
 }
 
 

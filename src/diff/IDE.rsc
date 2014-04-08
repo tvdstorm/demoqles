@@ -11,29 +11,18 @@ import diff::Annotate;
 // this (currently) breaks parser generator because of overlapping
 // layouts.
 
-// to be extended
-default Maybe[Grammar] objectGrammar() 
-  = just(grammar({}, #Form.definitions)); 
- // nothing();
-
-void setupDiffIDE() {
-  registerLanguage("DiffSyntax", "difftax", Tree (str src, loc l) {
-    if (nothing() := objectGrammar()) {
-      return parseDiff(src, l);
-    }
-    else {
-      return parseDiff(src, l, objectGrammar().val, "QL-LWC14");
-    }
+void setupDiffIDE(type[&T<:Tree] sort, str project) {
+  registerLanguage("Generic Diff", "gdiff", Tree (str src, loc l) {
+    g = grammar({}, sort.definitions);
+    return parseDiff(src, l, g, project);
   });
   
-  registerContributions("DiffSyntax", {
+  registerContributions("Generic Diff", {
     annotator(Tree (Tree input) {
-       return installHyperlinks(input, "QL-LWC14");
+       return installHyperlinks(input, project);
     }),
-    outliner(outlinerer("QL-LwC14"))
+    outliner(outlinerer(project))
   });
   
-  // annotator: set hyperlinks to source and target
-  // outliner: sort acc. to replace, insert, delete.
 }
 

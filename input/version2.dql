@@ -1,0 +1,10 @@
+form Bar {
+  "Wat is je leeftijd?"
+    age: integer
+    
+  "Another" x: integer
+  
+  if (age > 18) {
+    "Yet another" z: integer
+  }
+}
